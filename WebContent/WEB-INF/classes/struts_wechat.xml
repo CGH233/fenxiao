@@ -1,0 +1,12 @@
+<!DOCTYPE struts PUBLIC  
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"  
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+    <!-- 声明包和action对象 -->
+	<package name="wechatIndex" extends="struts-default" namespace="/">
+    	<action name="wechatValidate" class="wechatAction" method="wechatValidate">
+    	</action>
+	</package>
+	
+</struts>  
