@@ -19,7 +19,14 @@ public class BounsRule extends BaseBean implements Serializable{
 	private String directRetailRe;
 	private String indirectRetailRe;
 	private String twoMaRetailRe;
+	private String identityName;
 	
+	public String getIdentityName() {
+		return identityName;
+	}
+	public void setIdentityName(String identityName) {
+		this.identityName = identityName;
+	}
 	public int getLevel() {
 		return level;
 	}
@@ -81,4 +88,5 @@ public class BounsRule extends BaseBean implements Serializable{
 		this.twoMaRetailRe = twoMaRetailRe;
 	}
 
+	
 }

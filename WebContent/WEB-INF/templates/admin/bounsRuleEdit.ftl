@@ -1,5 +1,6 @@
 <div class="bjui-pageContent">
     <form action="bounsRuleUpdate" class="pageForm" data-toggle="validate" data-reload-navtab="true">
+        <input type="hidden" name="bounsRule.id" value="${bounsRule.id?string('#')}">
         <div class="pageFormContent" data-layout-h="0">
             <table class="table table-condensed table-hover">
                 <tbody>

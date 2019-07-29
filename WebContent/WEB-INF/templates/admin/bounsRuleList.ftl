@@ -34,7 +34,7 @@
                 <td>${bounsRule.indirectRetailRe}</td>
                 <td>${bounsRule.twoMaRetailRe}</td>
                 <td>
-                    <a href="bounsRuleEdit.action?id=${bounsRule.level?string('#')}" class="btn btn-green" data-toggle="dialog" data-width="800" data-height="400" data-id="userEdit" data-mask="true">编辑</a>
+                    <a href="bounsRuleEdit.action?level=${bounsRule.level?string('#')}" class="btn btn-green" data-toggle="dialog" data-width="800" data-height="400" data-id="userEdit" data-mask="true">编辑</a>
                    
                 </td>
             </tr>
