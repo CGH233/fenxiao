@@ -2,15 +2,12 @@ package com.hansan.fenxiao.entities;
 
 import java.io.Serializable;
 
-import javax.persistence.MappedSuperclass;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
-@MappedSuperclass
-@Table(name="bouns_rull")
-public class BounsRull extends BaseBean implements Serializable{
+@Entity
+@Table(name="bouns_rule")
+public class BounsRule extends BaseBean implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private int level;
 	private String directReward;
