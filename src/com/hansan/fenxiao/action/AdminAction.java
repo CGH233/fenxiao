@@ -1,4 +1,4 @@
- package com.hansan.fenxiao.action;
+package com.hansan.fenxiao.action;
  
  import com.hansan.fenxiao.entities.Admin;
  import com.hansan.fenxiao.service.IAdminService;

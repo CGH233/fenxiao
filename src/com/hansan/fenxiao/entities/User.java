@@ -1,4 +1,4 @@
- package com.hansan.fenxiao.entities;
+package com.hansan.fenxiao.entities;
  
  import java.io.Serializable;
  import java.util.Date;
