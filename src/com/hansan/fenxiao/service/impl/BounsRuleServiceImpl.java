@@ -27,4 +27,20 @@ public class BounsRuleServiceImpl<T extends BounsRule> extends BaseServiceImpl<T
 		return list;
 	}
 
+	@Override
+	public boolean editBounsRule(BounsRule bounsrule) {
+		boolean result = false;
+		result = bounsRullDao.editBoundsRule(bounsrule);
+		return result;
+	}
+
+	@Override
+	public BounsRule bounsRuleByLevel(int level) {
+		BounsRule bounsrule = null;
+		bounsrule = bounsRullDao.bounsRuleByLevel(level);
+		return bounsrule;
+	}
+	
+	
+
 }
