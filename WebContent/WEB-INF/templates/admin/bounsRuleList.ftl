@@ -7,7 +7,7 @@
     <table data-toggle="tablefixed" data-width="100%" data-layout-h="0" data-nowrap="true">
         <thead>
 			<tr>
-				<th orderField="code">身份</th>
+				<th orderField="code">身份名称</th>
 				<th orderField="name">直推奖励</th>
                 <th orderField="name">间推奖励</th>
                 <th orderField="name">区域奖</th>
@@ -23,7 +23,7 @@
 		<tbody>
         <#list bounsRuleList as bounsRule>
             <tr>
-                <td>${bounsRule.level}</td>
+                <td>${bounsRule.identityName}</td>
                 <td>${bounsRule.directReward}</td>
                 <td>${bounsRule.indirectReward}</td>
                 <td>${bounsRule.regionalReward}</td>
@@ -34,8 +34,8 @@
                 <td>${bounsRule.indirectRetailRe}</td>
                 <td>${bounsRule.twoMaRetailRe}</td>
                 <td>
-                    <a href="" class="btn btn-green" data-toggle="dialog" data-width="800" data-height="400" data-id="userEdit" data-mask="true">编辑</a>
-                    <a href="" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
+                    <a href="bounsRuleEdit.action?id=${bounsRule.level?string('#')}" class="btn btn-green" data-toggle="dialog" data-width="800" data-height="400" data-id="userEdit" data-mask="true">编辑</a>
+                   
                 </td>
             </tr>
 		</#list>

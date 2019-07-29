@@ -8,9 +8,17 @@
     	<action name="userList" class="userAction" method="list">
     		<param name="ftlFileName">userList.ftl</param>
     	</action>
+    	
     	<action name="bounsRuleList" class="bounsRuleAction" method="bounsRuleList">
     		<param name="ftlFileName">bounsRuleList.ftl</param>
     	</action>
+    	<action name="bounsRuleEdit" class="bounsRuleAction" method="bounsRuleByLevel">
+    		<param name="ftlFileName">bounsRuleEdit.ftl</param>
+    	</action>
+    	<action name="bounsRuleUpdate" class="bounsRuleAction" method="bounsRuleUpdate">
+    	</action>
+    	
+    	
     	<action name="userAdd" class="userAction" method="add">
     	</action>
     	<action name="userSave" class="userAction" method="save">

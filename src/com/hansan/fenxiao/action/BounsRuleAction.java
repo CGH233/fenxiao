@@ -52,4 +52,11 @@ public class BounsRuleAction extends BaseAction{
 	     root.put("key", key);
 	     FreemarkerUtils.freemarker(this.request, this.response, this.ftlFileName, this.cfg, root);
 	}
+	public void bounsRuleByLevel() {
+		
+	}
+	public void bounsRuleUpdate() {
+		
+	}
+	
 }
