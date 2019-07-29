@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.hansan.fenxiao.dao.IBounsRullDao;
 import com.hansan.fenxiao.entities.BounsRule;
+import com.hansan.fenxiao.entities.User;
 
 @Repository("bounsRuleDao")
 @Scope("prototype")
@@ -30,4 +31,17 @@ public class BounsRuleDaoImpl extends  BaseDaoImpl<BounsRule> implements IBounsR
 		return listResult;
 	}
 
+	@Override
+	public boolean editBoundsRule(BounsRule bounsrule) {
+		boolean result = saveOrUpdate(bounsrule);
+		return result;
+	}
+
+	@Override
+	public BounsRule bounsRuleByLevel(int level) {
+		String hql = "from BounsRule where level=:level";
+		BounsRule result = (BounsRule)getSession().createQuery(hql)
+			       .setInteger("level", level).uniqueResult();
+		return result;
+	}
 }
