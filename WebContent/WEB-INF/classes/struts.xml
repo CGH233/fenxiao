@@ -36,4 +36,5 @@
 	<include file="struts_recharge.xml"/>
 	<include file="struts_rechargeCard.xml"/>
 	<include file="struts_wechat.xml"/>
+	<include file="struts_bounsRule.xml"></include>
 </struts> 

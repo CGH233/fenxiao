@@ -200,6 +200,7 @@ $(function(){
                                 <li data-id="15" data-pid="1" data-url="withdrawList" data-tabid="withdrawList">提现管理</li>
                                 <li data-id="15" data-pid="1" data-url="rechargeList" data-tabid="rechargeList">充值管理</li>
                                 <li data-id="15" data-pid="1" data-url="rechargeCardList" data-tabid="rechargeCardList">充值卡管理</li>
+                                <li data-id="15" data-pid="1" data-url="bounsRuleList" data-tabid="bounsRuleList">奖励系统管理</li>
                             </ul>
                         </div>
                     </div>
