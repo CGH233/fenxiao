@@ -2,10 +2,12 @@
  
  import com.alibaba.fastjson.JSONObject;
 import com.google.zxing.WriterException;
+import com.hansan.fenxiao.entities.BounsRule;
 import com.hansan.fenxiao.entities.Config;
  import com.hansan.fenxiao.entities.Financial;
  import com.hansan.fenxiao.entities.User;
- import com.hansan.fenxiao.service.IConfigService;
+import com.hansan.fenxiao.service.IBounsRuleService;
+import com.hansan.fenxiao.service.IConfigService;
  import com.hansan.fenxiao.service.IFinancialService;
  import com.hansan.fenxiao.service.IUserService;
  import com.hansan.fenxiao.utils.BjuiJson;
@@ -54,6 +56,10 @@ import java.io.PrintStream;
  
    @Resource(name="financialService")
    private IFinancialService<Financial> financialService;
+   
+   @Resource(name="bounsRuleService")
+	private IBounsRuleService<BounsRule> bounsRuleService;
+   
    private User user;
    private String ftlFileName;
  
@@ -79,8 +85,10 @@ import java.io.PrintStream;
      this.cfg.setServletContextForTemplateLoading(
        this.request.getServletContext(), "WEB-INF/templates/admin");
      List userList = this.userService.list(hql, this.page.getStart(), this.page.getPageSize(), new Object[0]);
+     List<BounsRule> bounsRuleList = this.bounsRuleService.getBounsRuleList();
      Map root = new HashMap();
      root.put("userList", userList);
+     root.put("bounsRuleList", bounsRuleList);
      root.put("page", this.page);
      root.put("key", key);
      FreemarkerUtils.freemarker(this.request, this.response, this.ftlFileName, this.cfg, root);
@@ -194,8 +202,10 @@ import java.io.PrintStream;
          "", "", "");
      } else {
        int id = 0;
+       
        try {
          id = Integer.parseInt(idStr);
+         
        }
        catch (Exception e) {
          callbackData = BjuiJson.json("300", "参数错误", "", "", "", 
@@ -208,13 +218,15 @@ import java.io.PrintStream;
          callbackData = BjuiJson.json("300", "用户不存在", "", "", 
            "", "", "", "");
        } else {
+    	 
          this.cfg = new Configuration();
- 
+         List<BounsRule> bounsRuleList = this.bounsRuleService.getBounsRuleList();
          this.cfg.setServletContextForTemplateLoading(
            this.request.getServletContext(), 
            "WEB-INF/templates/admin");
          Map root = new HashMap();
          root.put("user", findUser);
+         root.put("bounsRuleList", bounsRuleList);
          FreemarkerUtils.freemarker(this.request, this.response, this.ftlFileName, this.cfg, root);
        }
      }
@@ -233,6 +245,7 @@ import java.io.PrintStream;
      }
      String callbackData = "";
      try {
+    	 
        if (this.user == null) {
          callbackData = BjuiJson.json("300", "参数错误", "", "", "", "", 
            "", "");
@@ -241,6 +254,11 @@ import java.io.PrintStream;
          if (StringUtils.isNotEmpty(this.user.getPassword())) {
            findUser.setPassword(Md5.getMD5Code(this.user.getPassword()));
          }
+         findUser.setName(user.getName());
+         findUser.setPhone(user.getPhone());
+         findUser.setStatus(user.getStatus());
+         findUser.setLevel(user.getLevel());
+         //findUser.setStatusDate();
          boolean result = this.userService.saveOrUpdate(findUser);
  
          if (result) {
