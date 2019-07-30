@@ -8,5 +8,4 @@ public abstract interface IBounsRuleService<T extends BounsRule> extends IBaseSe
 	public abstract List<BounsRule> getBounsRuleList();
 	public abstract boolean editBounsRule(BounsRule bounsrule);
 	public abstract BounsRule bounsRuleByLevel(int level);
-	
 }
