@@ -18,6 +18,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script async="" src="js/analytics.js"></script>
 	<script type="text/javascript" async="" src="js/da_opt.js"></script>
 	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/jsAddress.js"></script>	
 	<script type="text/javascript">
 	var tuijianren=getUrlVars()["tuijianren"];
 	$(document).ready(function() {
@@ -87,10 +88,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 			<em class="delete" style="display:none" name="Wap_reg_person_001"></em>
 		</div>
+		<div class="input-a sn-block wbox mt30 pr">
+			<span>地址</span>
+			<!-- 
+			<select id="cmbProvince" name="cmbProvince" onchange = "test_onchange(this.value)"></select>
+			<select id="cmbCity" name="cmbCity"></select>
+			<select id="cmbArea" name="cmbArea"></select>	
+			<script type="text/javascript">		
+				addressInit('cmbProvince', 'cmbCity', 'cmbArea');
+			</script>
+				-->			 	
+		</div>
 		<a href="javascript:void(0)" id="nextStep" name="Wap_reg_person_005" onclick="register(); return false;" class="first-step sn-btn sn-btn-big sn-btn-block m30 sn-btn-positive">注册</a>
 		<p class="assisFun f14 m30"><a href="login.jsp" name="WAP_login_none_register">登录</a>
 		<a href="findPassword.jsp">忘记密码?</a></p>
 	</section>
 	<script type="text/javascript" src="js/zepto.min.js"></script>
-
+	
 </body></html>
