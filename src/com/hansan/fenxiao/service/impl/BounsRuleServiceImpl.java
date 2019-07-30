@@ -29,7 +29,7 @@ public class BounsRuleServiceImpl<T extends BounsRule> extends BaseServiceImpl<T
 
 	@Override
 	public boolean editBounsRule(BounsRule bounsrule) {
-		boolean result = false;
+		boolean result;
 		result = bounsRullDao.editBoundsRule(bounsrule);
 		return result;
 	}

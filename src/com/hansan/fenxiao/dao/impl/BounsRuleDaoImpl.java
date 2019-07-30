@@ -33,8 +33,8 @@ public class BounsRuleDaoImpl extends  BaseDaoImpl<BounsRule> implements IBounsR
 
 	@Override
 	public boolean editBoundsRule(BounsRule bounsrule) {
-		
-		boolean result = saveOrUpdate(bounsrule);
+		boolean result;
+		result = saveOrUpdate(bounsrule);
 		return result;
 	}
 
