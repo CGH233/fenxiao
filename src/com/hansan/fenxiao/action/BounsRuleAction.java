@@ -2,6 +2,8 @@ package com.hansan.fenxiao.action;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +37,8 @@ public class BounsRuleAction extends BaseAction{
 	@Resource(name="bounsRuleService")
 	private IBounsRuleService<BounsRule> bounsRuleService;
 	private BounsRule bounsrule;
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    
 	
 
 
@@ -79,7 +83,8 @@ public class BounsRuleAction extends BaseAction{
 	    	 
 	    	 
 	    	 BounsRule bounsrule = new BounsRule();
-	    	 bounsrule.setId(Integer.parseInt(this.request.getParameter("bounsRule.id")));
+	    	 BounsRule bounsruleUnsave = new BounsRule();
+	    	 int level = Integer.parseInt(this.request.getParameter("bounsRule.level"));
 	    	 bounsrule.setIdentityName(this.request.getParameter("bounsRule.identityName"));
 	    	 bounsrule.setDirectReward(this.request.getParameter("bounsRule.directReward"));
 	    	 bounsrule.setIndirectReward(this.request.getParameter("bounsRule.indirectReward"));
@@ -91,11 +96,17 @@ public class BounsRuleAction extends BaseAction{
 	    	 bounsrule.setIndirectRetailRe(this.request.getParameter("bounsRule.indirectRetailRe"));
 	    	 bounsrule.setTwoMaRetailRe(this.request.getParameter("bounsRule.twoMaRetailRe"));
 	    	 
-	    	 if(bounsrule==null) {
+	    	 if(level < 1) {
 	    		 callbackData = BjuiJson.json("300", "参数错误", "", 
 	    	             "", "", "true", "", "");
 	    	 }else {
-	    		 boolean result = this.bounsRuleService.editBounsRule(bounsrule);
+	    		 bounsruleUnsave = this.bounsRuleService.bounsRuleByLevel(level);
+	    		 bounsrule.setCreateDate(bounsruleUnsave.getCreateDate());
+	    		 bounsrule.setVersion(bounsruleUnsave.getVersion());
+	    		 bounsrule.setId(bounsruleUnsave.getId());
+	    		 bounsrule.setLevel(level);
+	    		 boolean result;
+	    		 result = this.bounsRuleService.editBounsRule(bounsrule);
 	    		 
 		         if (result) {
 		           callbackData = BjuiJson.json("200", "修改成功", "", 
@@ -129,7 +140,7 @@ public class BounsRuleAction extends BaseAction{
 //	        this.request.setAttribute("status", "0");
 //	        this.request.setAttribute("message", "没有权限");
 //	      } else {
-
+	    	
 	    	 this.cfg = new Configuration();
 	         this.cfg.setServletContextForTemplateLoading( this.request.getServletContext(), 
 	        		 										"WEB-INF/templates/admin");
