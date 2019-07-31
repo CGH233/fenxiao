@@ -43,8 +43,7 @@
    public User getUserByPhone(String phone)
    {
      String hql = "from User where phone=:phone and deleted=0";
-     User user = (User)getSession().createQuery(hql)
-       .setString("phone", phone).uniqueResult();
+     User user = (User)getSession().createQuery(hql).setString("phone", phone).uniqueResult();
      return user;
    }
  

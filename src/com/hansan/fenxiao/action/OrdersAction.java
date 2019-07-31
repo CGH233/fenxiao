@@ -124,15 +124,16 @@ public class OrdersAction extends BaseAction
            this.request.setAttribute("status", "0");
            this.request.setAttribute("message", "您未登陆或者登陆失效，请重新登陆");
        } else {
-    	   if (loginUser.getLevel() < findProduct.getLevel()) {
+    	   User user = this.userService.getUserByName(loginUser.getName());
+    	   if (user.getLevel() < findProduct.getLevel()) {
     		   this.request.setAttribute("status", "0");
                this.request.setAttribute("message", "您的权限不足，无法购买此产品");
     	   }else {
-	    	   if (loginUser.getReBuyStatus() == 1 && findProduct.getLevel() == 1) {
+	    	   if (user.getReBuyStatus() == 1 && findProduct.getLevel() == 1) {
 	    		     findProduct.setMoney(findProduct.getRebuy());
 	    	   }
 	    	   	this.request.setAttribute("status", "1");
-	    	   	this.request.setAttribute("rebuy", loginUser.getReBuyStatus());
+	    	   	this.request.setAttribute("rebuy", user.getReBuyStatus());
 	    	   	this.request.setAttribute("product", findProduct);
     	   }
        }
@@ -175,16 +176,17 @@ public class OrdersAction extends BaseAction
         this.request.setAttribute("status", "0");
         this.request.setAttribute("message", "您未登陆或者登陆失效，请重新登陆");
       } else {
+    	User user = this.userService.getUserByName(loginUser.getName());
         Orders newOrders = new Orders();
         newOrders.setProductId(""+findProduct.getId());
         newOrders.setProductName(findProduct.getTitle());
         newOrders.setProductNum(Integer.valueOf(1));
-        if (loginUser.getReBuyStatus() == 0) {
+        if (user.getReBuyStatus() == 0) {
         	newOrders.setProductMoney(findProduct.getMoney());
         } else {
         	newOrders.setProductMoney(findProduct.getRebuy());
         }
-        newOrders.setUser(loginUser);
+        newOrders.setUser(user);
         newOrders.setStatus(Integer.valueOf(0));
         newOrders.setMoney(Double.valueOf(newOrders.getProductMoney().doubleValue()));
 

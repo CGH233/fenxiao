@@ -45,7 +45,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<img src="../images/avatar.png" onerror="this.src='../images/avatar.png'">
 			</div>
 			<div class="meb-name">
-			${sessionScope.loginUser.phone }
+			${sessionScope.loginUser.name }
 			</div>
 		</div>
 	</div>

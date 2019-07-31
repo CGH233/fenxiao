@@ -17,12 +17,12 @@ var addressInit = function(_cmbProvince, _cmbCity, _cmbArea, defaultProvince, de
 			}
 		}
 	}
-	function cmbAddOption(cmb, str, obj)
+	function cmbAddOption(cmb, str, obj, index)
 	{
 		var option = document.createElement("OPTION");
 		cmb.options.add(option);
 		option.innerText = str;
-		option.value = str;
+		option.value = index;
 		option.obj = obj;
 	}
 	
@@ -33,7 +33,7 @@ var addressInit = function(_cmbProvince, _cmbCity, _cmbArea, defaultProvince, de
 		var item = cmbCity.options[cmbCity.selectedIndex].obj;
 		for(var i=0; i<item.areaList.length; i++)
 		{
-			cmbAddOption(cmbArea, item.areaList[i], null);
+			cmbAddOption(cmbArea, item.areaList[i], null, i);
 		}
 		cmbSelect(cmbArea, defaultArea);
 	}
@@ -45,7 +45,7 @@ var addressInit = function(_cmbProvince, _cmbCity, _cmbArea, defaultProvince, de
 		var item = cmbProvince.options[cmbProvince.selectedIndex].obj;
 		for(var i=0; i<item.cityList.length; i++)
 		{
-			cmbAddOption(cmbCity, item.cityList[i].name, item.cityList[i]);
+			cmbAddOption(cmbCity, item.cityList[i].name, item.cityList[i], i);
 		}
 		cmbSelect(cmbCity, defaultCity);
 		changeCity();
@@ -54,7 +54,7 @@ var addressInit = function(_cmbProvince, _cmbCity, _cmbArea, defaultProvince, de
 	
 	for(var i=0; i<provinceList.length; i++)
 	{
-		cmbAddOption(cmbProvince, provinceList[i].name, provinceList[i]);
+		cmbAddOption(cmbProvince, provinceList[i].name, provinceList[i], i);
 	}
 	cmbSelect(cmbProvince, defaultProvince);
 	changeProvince();

@@ -117,7 +117,9 @@ import java.io.PrintStream;
      String province = this.request.getParameter("cmbProvince");
      String city = this.request.getParameter("cmbCity");
      String area = this.request.getParameter("cmbArea");
-     System.out.println(province+"["+city+"]"+area);
+     String address = province+"|"+city+"|"+area;
+     
+     
      User tjrUser = this.userService.getUserByNo(tuijianren);
      JSONObject json = new JSONObject();
      if (this.user == null) {
@@ -126,10 +128,12 @@ import java.io.PrintStream;
      } else if (this.userService.getUserByName(this.user.getName()) != null) {
        json.put("status", "0");
        json.put("message", "账号已存在");
-     } else if (this.userService.getUserByName(this.user.getPhone()) != null) {
-       json.put("status", "0");
-       json.put("message", "手机号已存在");
-     } else if (tjrUser == null) {
+     } 
+//       else if (this.userService.getUserByPhone(this.user.getPhone()) != null) {
+//       json.put("status", "0");
+//       json.put("message", "手机号已存在");
+//     } 
+     else if (tjrUser == null) {
        json.put("status", "0");
        json.put("message", "推荐人不存在");
      } else if (tjrUser.getStatus().intValue() == 0) {
@@ -159,6 +163,7 @@ import java.io.PrintStream;
        this.user.setCommission(Double.valueOf(0.0D));
        this.user.setDeleted(false);
        this.user.setCreateDate(new Date());
+       this.user.setAddress(address);
        
        boolean res = this.userService.saveOrUpdate(this.user);
        if (res) {
@@ -178,15 +183,24 @@ import java.io.PrintStream;
          session.setAttribute("loginUser", loginUser);
          json.put("status", "1");
          json.put("message", "注册成功");
-       } else {
+         } else {
          json.put("status", "0");
          json.put("message", "注册失败，请重试");
        }
      }
-     out.print(json.toString());
-     out.flush();
-     out.close();
-   }
+     try {
+    	 this.request.setAttribute("status", json.get("status").toString());
+		 this.request.setAttribute("message", json.get("message").toString());
+    	 if (json.get("status") == "0") {	 
+    		 this.request.getRequestDispatcher("register.jsp").forward(this.request, this.response);
+    	 }else {
+    		 this.request.getRequestDispatcher("login.jsp").forward(this.request, this.response);
+    	 }
+ 	} catch (ServletException | IOException e1) {
+ 		// TODO Auto-generated catch block
+ 		e1.printStackTrace();
+ 	}
+  }
  
    public void info()
      throws JSONException
