@@ -16,7 +16,7 @@
                     <tr>
                     	<td>
                             <label for="j_dialog_code" class="control-label x90">用户名：</label>
-                            <input type="text" name="user.name" readonly="readonly" id="name" data-rule="required" size="20" value="${user.name}">
+                            <input type="text" name="user.name"  id="name" data-rule="required" size="20" value="${user.name}">
                         </td>
                     </tr>
                     <tr>
@@ -28,7 +28,7 @@
                     <tr>
                         <td>
                             <label for="j_dialog_name" class="control-label x90">手机号：</label>
-                            <input type="text" name="phone" readonly="readonly" id="phone" data-rule="required" size="20" value="${user.phone!''}">
+                            <input type="text" name="user.phone"  id="phone" data-rule="required" size="20" value="${user.phone}">
                         </td>
                     </tr>
                     <tr>
@@ -52,15 +52,31 @@
                     <tr>
                         <td>
                             <label for="j_dialog_name" class="control-label x90">注册IP：</label>
-                            <input type="text" name="registerIp" readonly="readonly" id="registerIp" data-rule="required" size="20" value="${user.registerIp}">
+                            <input type="text" name="registerIp" readonly="readonly" id="registerIp" data-rule="required" value="${user.registerIp}">
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            <label for="j_dialog_name" class="control-label x90">状态：</label>
-                            <input type="text" name="status" readonly="readonly" id="status" data-rule="required" size="20" value="<#if user.status==0>未激活<#else>已激活</#if>">
-                        </td>
-                    </tr>
+                        <td>
+							<label for="status" class="control-label x90">状态：</label>
+                            <select name="user.status" id="status" style="text-align:left;text-align-last:left;width:90px;margin:0 auto;" >
+                                 <option value='0' <#if user?if_exists.status == 0>selected</#if>>未激活</option>
+                                 <option value='1' <#if user?if_exists.status == 1></#if>>已激活</option>
+                            </select>
+                        </td>
+                    </tr>
+					<tr>
+                        <td>
+							<label for="identityName" class="control-label x90">用户身份：</label>
+                            <select name="user.level" id="identityName" style="text-align:left;text-align-last:left;width:90px" >
+                                <option value='0' <#if user?if_exists.level == 0>selected</#if>>无身份</option> 
+								<#list bounsRuleList as identity>
+									<option value="${identity.level}" <#if user?if_exists.level == identity.level></#if>>
+										${identity.identityName}
+									</option>
+								</#list>                             
+                            </select>
+                        </td>
+                    </tr>
                     <tr>
                         <td>
                             <label for="j_dialog_name" class="control-label x90">最后登录时间：</label>

@@ -20,6 +20,8 @@
 				<th orderField="code">ID</th>
 				<th orderField="name">编号</th>
                 <th orderField="name">用户名</th>
+                <th orderField="name">用户身份</th>
+                <th orderField="name">激活状态</th>
                 <th orderField="name">手机号码</th>
                 <th orderField="grade">余额</th>
                 <th orderField="idno">佣金</th>
@@ -34,6 +36,16 @@
                 <td>${user.id}</td>
                 <td>${user.no}</td>
                 <td>${user.name}</td>
+                <td>
+                	<#list bounsRuleList as identity>
+                		<#if user.level == identity.level>${identity.identityName}</#if>
+                	</#list>
+                	<#if user.level == 0>无身份</#if>
+                </td>
+                <td>
+                	<#if user.status == 1>已激活
+                	<#else>未激活</#if>
+                </td>
                 <td>${user.phone!""}</td>
                 <td>${user.balance}</td>
                 <td>${user.commission!""}</td>

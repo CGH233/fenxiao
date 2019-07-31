@@ -21,6 +21,7 @@ package com.hansan.fenxiao.entities;
    private Double commission;
    private String superior;
    private Integer status;
+   private int level;
  
    @Temporal(TemporalType.TIMESTAMP)
    private Date statusDate;
@@ -110,4 +111,10 @@ package com.hansan.fenxiao.entities;
    public void setStatusDate(Date statusDate) {
      this.statusDate = statusDate;
    }
+	public int getLevel() {
+		return level;
+	}
+	public void setLevel(int level) {
+		this.level = level;
+}
  }
