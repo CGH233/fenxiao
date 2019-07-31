@@ -115,8 +115,8 @@ import java.io.PrintStream;
      }
      String tuijianren = this.request.getParameter("tuijianren");
      String province = this.request.getParameter("cmbProvince");
-     String city = this.request.getParameter("city");
-     String area = this.request.getParameter("area");
+     String city = this.request.getParameter("cmbCity");
+     String area = this.request.getParameter("cmbArea");
      System.out.println(province+"["+city+"]"+area);
      User tjrUser = this.userService.getUserByNo(tuijianren);
      JSONObject json = new JSONObject();

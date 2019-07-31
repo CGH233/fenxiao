@@ -4,6 +4,8 @@ var addressInit = function(_cmbProvince, _cmbCity, _cmbArea, defaultProvince, de
 	var cmbCity = document.getElementById(_cmbCity);
 	var cmbArea = document.getElementById(_cmbArea);
 	
+	
+	
 	function cmbSelect(cmb, str)
 	{
 		for(var i=0; i<cmb.options.length; i++)

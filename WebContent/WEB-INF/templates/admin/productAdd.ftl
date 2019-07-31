@@ -95,6 +95,12 @@ function S_NodeClick(event, treeId, treeNode) {
 	                    </tr>
 	                    <tr>
 	                        <td>
+	                            <label for="title" class="control-label x90">复购售价：</label>
+	                            <input type="text" name="product.rebuy" id="rebuy" data-rule="required;number" size="10" placeholder="请输入复购售价">元
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td>
 	                            <label for="content" class="control-label x90">内容：</label>
 	                            <div style="display: inline-block; vertical-align: left;">
 	                            <textarea name="product.content" id="j_form_content" class="j-content" data-rule="required" style="width: 680px;height:300px;" 
