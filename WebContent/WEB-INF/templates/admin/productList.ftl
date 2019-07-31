@@ -19,6 +19,7 @@
                 <th orderField="name">所属分类</th>
                 <th orderField="name">面额</th>
                 <th orderField="name">售价</th>
+                <th orderField="name">复购价格</th>
                 <th orderField="name">发布时间</th>
                 <th width="300">操作</th>
 			</tr>
@@ -35,6 +36,7 @@
                 </td>
                 <td>${product.bills}元</td>
                 <td>${product.money}元</td>
+                <td>${product.rebuy}元</td>
                 <td>${product.createDate}</td>
                 <td>
                 	<a href="kamiList?pid=${product.id}" class="btn btn-green" data-toggle="dialog" data-width="1000" data-height="600" data-id="lookKami" data-mask="true">查看卡密</a>

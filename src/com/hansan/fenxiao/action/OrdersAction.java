@@ -118,8 +118,24 @@ public class OrdersAction extends BaseAction
       this.request.setAttribute("status", "0");
       this.request.setAttribute("message", "商品不存在");
     } else {
-      this.request.setAttribute("status", "1");
-      this.request.setAttribute("product", findProduct);
+    	HttpSession session = this.request.getSession();
+        User loginUser = (User)session.getAttribute("loginUser");
+        if ((loginUser == null) || (loginUser.getId() == null)) {
+           this.request.setAttribute("status", "0");
+           this.request.setAttribute("message", "您未登陆或者登陆失效，请重新登陆");
+       } else {
+    	   if (loginUser.getLevel() < findProduct.getLevel()) {
+    		   this.request.setAttribute("status", "0");
+               this.request.setAttribute("message", "您的权限不足，无法购买此产品");
+    	   }else {
+	    	   if (loginUser.getReBuyStatus() == 1 && findProduct.getLevel() == 1) {
+	    		     findProduct.setMoney(findProduct.getRebuy());
+	    	   }
+	    	   	this.request.setAttribute("status", "1");
+	    	   	this.request.setAttribute("rebuy", loginUser.getReBuyStatus());
+	    	   	this.request.setAttribute("product", findProduct);
+    	   }
+       }
     }
     try {
       this.request.getRequestDispatcher("cart.jsp").forward(this.request, this.response);
@@ -133,12 +149,9 @@ public class OrdersAction extends BaseAction
   public void save()
   {
     String pidStr = this.request.getParameter("pid");
-    String numStr = this.request.getParameter("num");
     int pid = 0;
-    int num = 1;
     try {
       pid = Integer.parseInt(pidStr);
-      num = Integer.parseInt(numStr);
     } catch (Exception e) {
       this.request.setAttribute("status", "0");
       this.request.setAttribute("message", "参数错误");
@@ -165,11 +178,15 @@ public class OrdersAction extends BaseAction
         Orders newOrders = new Orders();
         newOrders.setProductId(""+findProduct.getId());
         newOrders.setProductName(findProduct.getTitle());
-        newOrders.setProductNum(Integer.valueOf(num));
-        newOrders.setProductMoney(findProduct.getMoney());
+        newOrders.setProductNum(Integer.valueOf(1));
+        if (loginUser.getReBuyStatus() == 0) {
+        	newOrders.setProductMoney(findProduct.getMoney());
+        } else {
+        	newOrders.setProductMoney(findProduct.getRebuy());
+        }
         newOrders.setUser(loginUser);
         newOrders.setStatus(Integer.valueOf(0));
-        newOrders.setMoney(Double.valueOf(num * findProduct.getMoney().doubleValue()));
+        newOrders.setMoney(Double.valueOf(newOrders.getProductMoney().doubleValue()));
 
         Random random = new Random();
         int n = random.nextInt(9999);
@@ -259,6 +276,10 @@ public class OrdersAction extends BaseAction
             findUser.setStatus(Integer.valueOf(1));
             findUser.setStatusDate(new Date());//
           }
+          //如果用户第一次购买，则设置为复购状态
+          if (findUser.getReBuyStatus() == 0) {
+        	  findUser.setReBuyStatus(Integer.valueOf(1));
+          }
           this.userService.saveOrUpdate(findUser);
           findOrders.setStatus(Integer.valueOf(1));//更新订单支付状态（已支付）
           String summary = "卡密信息:<br/>";
@@ -337,7 +358,8 @@ public class OrdersAction extends BaseAction
             }
 
           }
-
+          
+          
           json.put("status", "1");
           json.put("message", "付款成功");
           json.put("no", findOrders.getNo());

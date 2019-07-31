@@ -46,6 +46,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div class="sn-nav-title of">注册</div>
 	</div>
 	<section class="sn-main pr">
+		<form action="register()" class="pageForm" data-toggle="validate" data-reload-navtab="true">
 		<div class="input-a sn-block wbox mt30 pr">
 			<span>编号</span>
 			<div class="wbox-flex ml30 pr">
@@ -90,18 +91,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 		<div class="input-a sn-block wbox mt30 pr">
 			<span>地址</span>
-			<!-- 
-			<select id="cmbProvince" name="cmbProvince" onchange = "test_onchange(this.value)"></select>
+			<select id="cmbProvince" name="cmbProvince"></select>
 			<select id="cmbCity" name="cmbCity"></select>
-			<select id="cmbArea" name="cmbArea"></select>	
-			<script type="text/javascript">		
-				addressInit('cmbProvince', 'cmbCity', 'cmbArea');
-			</script>
-				-->			 	
+			<select id="cmbArea" name="cmbArea"></select>			
+			<script type="text/javascript">	
+				addressInit('cmbProvince', 'cmbCity', 'cmbArea');	 
+			</script>				 	
 		</div>
+		<button type="submit" class="first-step sn-btn sn-btn-big sn-btn-block m30 sn-btn-positive"">保存</button>
 		<a href="javascript:void(0)" id="nextStep" name="Wap_reg_person_005" onclick="register(); return false;" class="first-step sn-btn sn-btn-big sn-btn-block m30 sn-btn-positive">注册</a>
 		<p class="assisFun f14 m30"><a href="login.jsp" name="WAP_login_none_register">登录</a>
 		<a href="findPassword.jsp">忘记密码?</a></p>
+		</form>
 	</section>
 	<script type="text/javascript" src="js/zepto.min.js"></script>
 	

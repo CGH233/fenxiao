@@ -188,6 +188,7 @@ public class ProductAction extends BaseAction
         findProduct.setPicture(this.product.getPicture());
         findProduct.setTitle(this.product.getTitle());
         findProduct.setContent(this.product.getContent());
+        findProduct.setRebuy(this.product.getRebuy());
         boolean result = this.productService.saveOrUpdate(findProduct);
 
         if (result) {
@@ -261,7 +262,7 @@ public class ProductAction extends BaseAction
 
     int count = 0;
     String countHql = "select count(*) from Product where deleted=0";
-    String hql = "select new Product(id,picture,title,bills,money) from Product where deleted=0";
+    String hql = "select new Product(id,picture,title,bills,money, rebuy, level) from Product where deleted=0";
     if (!StringUtils.isEmpty(idStr)) {
       countHql = countHql + " and productCate.id=" + idStr;
       hql = hql + " and productCate.id=" + idStr;

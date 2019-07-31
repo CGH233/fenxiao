@@ -22,6 +22,7 @@ package com.hansan.fenxiao.entities;
    private String superior;
    private Integer status;
    private int level;
+   private int reBuyStatus;
  
    @Temporal(TemporalType.TIMESTAMP)
    private Date statusDate;
@@ -117,4 +118,10 @@ package com.hansan.fenxiao.entities;
 	public void setLevel(int level) {
 		this.level = level;
 }
+	public int getReBuyStatus() {
+		return reBuyStatus;
+	}
+	public void setReBuyStatus(int reBuyStatus) {
+		this.reBuyStatus = reBuyStatus;
+	}
  }
