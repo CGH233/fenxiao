@@ -40,6 +40,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</script>
 </head>
 <body>
+<%
+String errorInfo = (String)request.getAttribute("message");         // 获取错误属性
+if(errorInfo != null) {
+%>
+<script type="text/javascript" language="javascript">
+alert("<%=errorInfo%>");                                            // 弹出错误信息
+</script> 
+<%
+}
+%>
     <div class="sn-nav">
 		<div class="sn-nav-back">
 		<a class="sn-iconbtn" href="index.jsp">返回</a></div>
@@ -91,19 +101,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 		<div class="input-a sn-block wbox mt30 pr">
 			<span>地址</span>
-			<select id="cmbProvince" name="cmbProvince"></select>
-			<select id="cmbCity" name="cmbCity"></select>
-			<select id="cmbArea" name="cmbArea"></select>			
-			<script type="text/javascript">	
+			<select id="cmbProvince" name="cmbProvince" value=""></select>
+			<select id="cmbCity" name="cmbCity" value=""></select>
+			<select id="cmbArea" name="cmbArea" value=""></select>			
+			<script>	
 				addressInit('cmbProvince', 'cmbCity', 'cmbArea');	 
 			</script>				 	
 		</div>
-		<button type="submit" class="first-step sn-btn sn-btn-big sn-btn-block m30 sn-btn-positive"">保存</button>
-		<a href="javascript:void(0)" id="nextStep" name="Wap_reg_person_005" onclick="register(); return false;" class="first-step sn-btn sn-btn-big sn-btn-block m30 sn-btn-positive">注册</a>
-		<p class="assisFun f14 m30"><a href="login.jsp" name="WAP_login_none_register">登录</a>
-		<a href="findPassword.jsp">忘记密码?</a></p>
+		<button type="submit" class="first-step sn-btn sn-btn-big sn-btn-block m60 sn-btn-positive">注册</button>
 		</form>
+		<p class="assisFun f14 m30"><a href="login.jsp" name="WAP_login_none_register">登录</a>
+		<a href="findPassword.jsp">忘记密码?</a></p>		
 	</section>
 	<script type="text/javascript" src="js/zepto.min.js"></script>
-	
 </body></html>
