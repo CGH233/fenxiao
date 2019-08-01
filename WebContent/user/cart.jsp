@@ -18,7 +18,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <script type="text/javascript" src="../js/jquery.min.js"></script>
   <script type="text/javascript">
   	var money = ${requestScope.product.money };
-  	var pid = ${requestScope.product.id };
+  	var pid = ${requestScope.product.id };  
+  	<!--
   	var number = 1;
   	function updateQuantity(num){
   		var quantity = $("#quantity").val();
@@ -48,9 +49,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   			number = quantity;
   		}
   	}
-  	
+  	-->
   	function ordersSave(){
-  		window.location.href="ordersSave?pid="+pid+"&num="+number;
+  		window.location.href="ordersSave?pid="+pid;
   	}
   </script>
  </head>
@@ -103,13 +104,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            </div> 
            <div class="pro-box"> 
             <a href="javascript:void(0)" class="pro-name"> 
-            <p class="text-clamp2 fs26">${requestScope.product.title }</p>
+            <p class="text-clamp2 fs26">${requestScope.product.title } <c:if test="${requestScope.rebuy == 1 } and ${requestScope.product.level == 1}" >(复购)</c:if></p>
              </a> 
+             <!--  
             <div class="sn-count"> 
              <a href="javascript:void(0);" class="count-min " onclick="updateQuantity(-1);"></a> 
              <input type="text" value="1" class="input-reset count-num" maxlength="3" id="quantity" onblur="updateQuantityOnblur()" /> 
              <a href="javascript:void(0);" class="count-add " onclick="updateQuantity(1);"></a> 
             </div> 
+            -->
            </div> 
           </div> 
           <div class="cart-list-opra wbox"> 

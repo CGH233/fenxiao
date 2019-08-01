@@ -114,7 +114,10 @@ import java.io.PrintStream;
        e.printStackTrace();
      }
      String tuijianren = this.request.getParameter("tuijianren");
- 
+     String province = this.request.getParameter("cmbProvince");
+     String city = this.request.getParameter("cmbCity");
+     String area = this.request.getParameter("cmbArea");
+     System.out.println(province+"["+city+"]"+area);
      User tjrUser = this.userService.getUserByNo(tuijianren);
      JSONObject json = new JSONObject();
      if (this.user == null) {
@@ -139,12 +142,12 @@ import java.io.PrintStream;
        } catch (Exception e) {
          this.user.setRegisterIp("0.0.0.0");
        }
-       //上级关系转接，保证上级最多3人
+       //上级关系转接，保证无上限
        if (StringUtils.isEmpty(tjrUser.getSuperior())) {
          this.user.setSuperior(";" + tuijianren + ";");
        }
-       else if (tjrUser.getSuperior().split(";").length > 3)
-         this.user.setSuperior(";" + tjrUser.getSuperior().split(";", 3)[2] + tuijianren + ";");
+//       else if (tjrUser.getSuperior().split(";").length > 3)
+//         this.user.setSuperior(";" + tjrUser.getSuperior().split(";", 3)[2] + tuijianren + ";");
        else {
          this.user.setSuperior(tjrUser.getSuperior() + tuijianren + ";");
        }
@@ -155,8 +158,8 @@ import java.io.PrintStream;
        this.user.setBalance(Double.valueOf(0.0D));
        this.user.setCommission(Double.valueOf(0.0D));
        this.user.setDeleted(false);
- 
        this.user.setCreateDate(new Date());
+       
        boolean res = this.userService.saveOrUpdate(this.user);
        if (res) {
          User loginUser = this.userService.getUserByName(this.user.getName());

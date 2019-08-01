@@ -24,18 +24,22 @@
    private String content;
    private Double bills;
    private Double money;
+   private Double rebuy;
+   private int level;
  
    public Product()
    {
    }
  
-   public Product(Integer id, String picture, String title, Double bills, Double money)
+   public Product(Integer id, String picture, String title, Double bills, Double money, Double rebuy, int level)
    {
      this.id = id;
      this.picture = picture;
      this.title = title;
      this.bills = bills;
      this.money = money;
+     this.rebuy = rebuy;
+     this.level = level;
    }
  
    public String getTitle() {
@@ -84,4 +88,22 @@
    public void setMoney(Double money) {
      this.money = money;
    }
+	
+	public Double getRebuy() {
+		return rebuy;
+	}
+	
+	public void setRebuy(Double rebuy) {
+		this.rebuy = rebuy;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+
  }
