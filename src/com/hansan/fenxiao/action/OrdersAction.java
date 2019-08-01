@@ -764,6 +764,15 @@ public class OrdersAction extends BaseAction
                       commission.setRemark("来自用户（编号："+loginUser.getName()+",用户名："+loginUser.getName()+
                     		  				"）购买产品 ["+findOrders.getProductName()+"] 的直接推荐奖励");
                       remainMoney = remainMoney - commissionNum;
+                      commission.setType(Integer.valueOf(1));
+                      commission.setMoney(Double.valueOf(commissionNum));
+                      commission.setNo(""+System.currentTimeMillis());
+                      commission.setOperator(loginUser.getName());
+                      commission.setUser(diUser);
+                      commission.setCreateDate(date);
+                      commission.setDeleted(false);
+                      commission.setLevel(superList.length-1-i+1);
+                      this.commissionService.saveOrUpdate(commission);
             	  }//间接推荐人
             	  else if(i==superList.length-2){
             		  //计算佣金
@@ -786,27 +795,134 @@ public class OrdersAction extends BaseAction
                       commission.setRemark("来自用户（编号："+loginUser.getName()+",用户名："+loginUser.getName()+
                     		  				"）购买产品 ["+findOrders.getProductName()+"] 的间接推荐奖励");
                       remainMoney = remainMoney - commissionNum;
-                      
-            	  }//区域奖
-            	  else {
-            		  //待实现
-            	  }
-            	  
-            	 
-            	  commission.setType(Integer.valueOf(1));
-                  commission.setMoney(Double.valueOf(commissionNum));
-                  commission.setNo(""+System.currentTimeMillis());
-                  commission.setOperator(loginUser.getName());
-                  commission.setUser(diUser);
-                  commission.setCreateDate(date);
-                  commission.setDeleted(false);
-                  commission.setLevel(superList.length-1-i+1);
-                  this.commissionService.saveOrUpdate(commission);
-            	 
-                  
-            	  
+                      commission.setType(Integer.valueOf(1));
+                      commission.setMoney(Double.valueOf(commissionNum));
+                      commission.setNo(""+System.currentTimeMillis());
+                      commission.setOperator(loginUser.getName());
+                      commission.setUser(diUser);
+                      commission.setCreateDate(date);
+                      commission.setDeleted(false);
+                      commission.setLevel(superList.length-1-i+1);
+                      this.commissionService.saveOrUpdate(commission);
+                      break;
+            	  }          	  
               }
+              
+              //区域奖
+              String address = findUser.getAddress();
+              Commission commission = new Commission();
+              double commissionNum =0.0d;
+              
+              int province = Integer.parseInt(address.split("\\|")[0]);
+              int city = Integer.parseInt(address.split("\\|")[1]);
+              int area = Integer.parseInt(address.split("\\|")[2]);
+              List<User> pList = this.userService.list("from User where deleted = 0 and level = "+level200000);
+              List<User> cList = this.userService.list("from User where deleted = 0 and level = "+level100000);
+              List<User> aList = this.userService.list("from User where deleted = 0 and level = "+level10000);
+              for (User puser:pList) {
+            	  if (puser.getId() == findUser.getId()) continue;
+            	  int p = Integer.parseInt(puser.getAddress().split("\\|")[0]);
+            	  if (p == province) {
+            		  BounsRule bounsRule = this.bounsRuleService.bounsRuleByLevel(puser.getLevel());
+            		  String rewardString = bounsRule.getRegionalReward();
+            		  if(rewardString.contains("%")) {
+            			  commissionNum= findOrders.getMoney() * 
+            					  Double.parseDouble(rewardString.substring(0,rewardString.length()-1)) * 
+            					  0.01d;
+            		  }else {
+                		  commissionNum = Double.parseDouble(rewardString);
+            		  }
+            		  commissionNum = Double.valueOf(String .format("%.2f", commissionNum));
+            		  summary=summary+puser.getNo()+" "+puser.getName()+" "+bounsRule.getIdentityName()+" "+
+                    		  "区域奖励："+commissionNum+"<br/>";
+                      
+                      
+                      commission.setRemark("来自用户（编号："+loginUser.getName()+",用户名："+loginUser.getName()+
+                    		  				"）购买产品 ["+findOrders.getProductName()+"] 的"+bounsRule.getIdentityName()+"区域奖励");
+                      remainMoney = remainMoney - commissionNum;
+                      remainMoney = Double.valueOf(String .format("%.2f", remainMoney));
+                      commission.setType(Integer.valueOf(1));
+                      commission.setMoney(Double.valueOf(commissionNum));
+                      commission.setNo(""+System.currentTimeMillis());
+                      commission.setOperator(loginUser.getName());
+                      commission.setUser(puser);
+                      commission.setCreateDate(date);
+                      commission.setDeleted(false);
+                      commission.setLevel(level200000);
+                      this.commissionService.saveOrUpdate(commission);
+                      break;
+            	  }         	  
+              }
+              for (User cuser:cList) {
+            	  if (cuser.getId() == findUser.getId()) continue;
+            	  int c = Integer.parseInt(cuser.getAddress().split("\\|")[1]);
+            	  if (c == city) {
+            		  BounsRule bounsRule = this.bounsRuleService.bounsRuleByLevel(cuser.getLevel());
+            		  String rewardString = bounsRule.getRegionalReward();
+            		  if(rewardString.contains("%")) {
+            			  commissionNum= findOrders.getMoney() * 
+            					  Double.parseDouble(rewardString.substring(0,rewardString.length()-1)) * 
+            					  0.01d;
+            		  }else {
+                		  commissionNum = Double.parseDouble(rewardString);
+            		  }
+            		  commissionNum = Double.valueOf(String .format("%.2f", commissionNum));
+            		  summary=summary+cuser.getNo()+" "+cuser.getName()+" "+bounsRule.getIdentityName()+" "+
+                    		  "区域奖励："+commissionNum+"<br/>";
+                      
+                      
+                      commission.setRemark("来自用户（编号："+loginUser.getName()+",用户名："+loginUser.getName()+
+                    		  				"）购买产品 ["+findOrders.getProductName()+"] 的"+bounsRule.getIdentityName()+"区域奖励");
+                      remainMoney = remainMoney - commissionNum;
+                      commission.setType(Integer.valueOf(1));
+                      commission.setMoney(Double.valueOf(commissionNum));
+                      commission.setNo(""+System.currentTimeMillis());
+                      commission.setOperator(loginUser.getName());
+                      commission.setUser(cuser);
+                      commission.setCreateDate(date);
+                      commission.setDeleted(false);
+                      commission.setLevel(level200000);
+                      this.commissionService.saveOrUpdate(commission);
+                      break;
+            	  }
+              }
+              for (User auser:aList) {
+            	  if (auser.getId() == findUser.getId()) continue;
+            	  int a = Integer.parseInt(auser.getAddress().split("\\|")[2]);
+            	  if (a == area) {
+            		  BounsRule bounsRule = this.bounsRuleService.bounsRuleByLevel(auser.getLevel());
+            		  String rewardString = bounsRule.getRegionalReward();
+            		  if(rewardString.contains("%")) {
+            			  commissionNum= findOrders.getMoney() * 
+            					  Double.parseDouble(rewardString.substring(0,rewardString.length()-1)) * 
+            					  0.01d;
+            		  }else {
+                		  commissionNum = Double.parseDouble(rewardString);
+            		  }
+            		  commissionNum = Double.valueOf(String .format("%.2f", commissionNum));
+            		  summary=summary+auser.getNo()+" "+auser.getName()+" "+bounsRule.getIdentityName()+" "+
+                    		  "区域奖励："+commissionNum+"<br/>";
+                      
+                      
+                      commission.setRemark("来自用户（编号："+loginUser.getName()+",用户名："+loginUser.getName()+
+                    		  				"）购买产品 ["+findOrders.getProductName()+"] 的"+bounsRule.getIdentityName()+"区域奖励");
+                      remainMoney = remainMoney - commissionNum;
+                      commission.setType(Integer.valueOf(1));
+                      commission.setMoney(Double.valueOf(commissionNum));
+                      commission.setNo(""+System.currentTimeMillis());
+                      commission.setOperator(loginUser.getName());
+                      commission.setUser(auser);
+                      commission.setCreateDate(date);
+                      commission.setDeleted(false);
+                      commission.setLevel(level200000);
+                      this.commissionService.saveOrUpdate(commission);
+                      break;
+            	  }
+              }
+              
+              
               summary = summary + "剩余金额："+remainMoney+"<br/>";
+              
               //将订单描述存入订单中,保存订单信息
 
               //保存user，之后的操作与user无关
