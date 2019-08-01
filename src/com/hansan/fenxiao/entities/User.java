@@ -23,6 +23,7 @@ package com.hansan.fenxiao.entities;
    private Integer status;
    private int level;
    private int reBuyStatus;
+   private String address;
  
    @Temporal(TemporalType.TIMESTAMP)
    private Date statusDate;
@@ -123,5 +124,11 @@ package com.hansan.fenxiao.entities;
 	}
 	public void setReBuyStatus(int reBuyStatus) {
 		this.reBuyStatus = reBuyStatus;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
 	}
  }
