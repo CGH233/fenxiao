@@ -97,10 +97,10 @@
    public void setPayDate(Date payDate) {
      this.payDate = payDate;
    }
-public Double getRemainMoney() {
-	return remainMoney;
-}
-public void setRemainMoney(Double remainMoney) {
-	this.remainMoney = remainMoney;
-}
+	public Double getRemainMoney() {
+		return remainMoney;
+	}
+	public void setRemainMoney(Double remainMoney) {
+		this.remainMoney = remainMoney;
+	}
  }
