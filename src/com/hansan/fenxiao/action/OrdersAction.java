@@ -930,6 +930,7 @@ public class OrdersAction extends BaseAction
               findOrders.setStatus(Integer.valueOf(1));//更新订单支付状态（已支付）
               findOrders.setSummary(summary);
               findOrders.setPayDate(date);
+              findOrders.setRemainMoney(remainMoney);
               this.ordersService.saveOrUpdate(findOrders);
               
               //为购买的用户添加财务明细

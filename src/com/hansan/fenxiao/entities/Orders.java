@@ -31,6 +31,7 @@
    private String no;
    private Integer status;
    private String summary;
+   private Double remainMoney;
  
    @Temporal(TemporalType.TIMESTAMP)
    private Date payDate;
@@ -96,4 +97,10 @@
    public void setPayDate(Date payDate) {
      this.payDate = payDate;
    }
+public Double getRemainMoney() {
+	return remainMoney;
+}
+public void setRemainMoney(Double remainMoney) {
+	this.remainMoney = remainMoney;
+}
  }
