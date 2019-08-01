@@ -104,7 +104,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            </div> 
            <div class="pro-box"> 
             <a href="javascript:void(0)" class="pro-name"> 
-            <p class="text-clamp2 fs26">${requestScope.product.title } <c:if test="${requestScope.rebuy == 1 } and ${requestScope.product.level == 1}" >(复购)</c:if></p>
+            <p class="text-clamp2 fs26">${requestScope.product.title } <c:if test="${requestScope.rebuy == 1 and requestScope.product.level == 1}" >(复购)</c:if></p>
              </a> 
              <!--  
             <div class="sn-count"> 
