@@ -60,7 +60,7 @@
 							<label for="status" class="control-label x90">状态：</label>
                             <select name="user.status" id="status" style="text-align:left;text-align-last:left;width:90px;margin:0 auto;" >
                                  <option value='0' <#if user?if_exists.status == 0>selected</#if>>未激活</option>
-                                 <option value='1' <#if user?if_exists.status == 1></#if>>已激活</option>
+                                 <option value='1' <#if user?if_exists.status == 1>selected</#if>>已激活</option>
                             </select>
                         </td>
                     </tr>
@@ -68,9 +68,9 @@
                         <td>
 							<label for="identityName" class="control-label x90">用户身份：</label>
                             <select name="user.level" id="identityName" style="text-align:left;text-align-last:left;width:90px" >
-                                <option value='0' <#if user?if_exists.level == 0>selected</#if>>无身份</option> 
+                                <option value='0' <#if user?if_exists.level == 0></#if>>无身份</option> 
 								<#list bounsRuleList as identity>
-									<option value="${identity.level}" <#if user?if_exists.level == identity.level></#if>>
+									<option value="${identity.level}" <#if user?if_exists.level == identity.level>selected</#if>>
 										${identity.identityName}
 									</option>
 								</#list>                             

@@ -71,6 +71,12 @@ public class OrdersAction extends BaseAction
   
   private Orders orders;
   private String ftlFileName;
+  private int level398 = 1;
+  private int level990 = 2;
+  private int level3980 = 3;
+  private int level10000 = 4;
+  private int level100000 = 5;
+  private int level200000 = 6;
 
   @Resource(name="configService")
   private IConfigService<Config> configService;
@@ -132,11 +138,11 @@ public class OrdersAction extends BaseAction
            this.request.setAttribute("message", "您未登陆或者登陆失效，请重新登陆");
        } else {
     	   User user = this.userService.getUserByName(loginUser.getName());
-    	   if (user.getLevel() < findProduct.getLevel()) {
+    	   if (user.getLevel() < findProduct.getLevel() && findProduct.getLevel() > level398) {
     		   this.request.setAttribute("status", "0");
                this.request.setAttribute("message", "您的权限不足，无法购买此产品");
     	   }else {
-	    	   if (user.getReBuyStatus() == 1 && findProduct.getLevel() == 1) {
+	    	   if (user.getReBuyStatus() == 1 && findProduct.getLevel() == level398) {
 	    		     findProduct.setMoney(findProduct.getRebuy());
 	    	   }
 	    	   	this.request.setAttribute("status", "1");
@@ -189,10 +195,10 @@ public class OrdersAction extends BaseAction
         newOrders.setProductName(findProduct.getTitle());
         newOrders.setProductNum(Integer.valueOf(1));
         
-        if(loginUser.getReBuyStatus() != 0 && findProduct.getLevel()==1) {
-        	newOrders.setProductMoney(findProduct.getMoney());
-        } else {
+        if(user.getReBuyStatus() != 0 && findProduct.getLevel()==1) {
         	newOrders.setProductMoney(findProduct.getRebuy());
+        } else {
+        	newOrders.setProductMoney(findProduct.getMoney());        	
         }
         
         newOrders.setUser(loginUser);
@@ -254,7 +260,9 @@ public class OrdersAction extends BaseAction
     Orders findOrders = this.ordersService.findByNo(no);//订单
     HttpSession session = this.request.getSession();
     User loginUser = (User)session.getAttribute("loginUser");//登录用户
-
+    Product product = new Product();
+    int productLevel = 0;
+    
     JSONObject json = new JSONObject();
     if ((loginUser == null) || (loginUser.getId() == null)) {
       json.put("status", "0");
@@ -290,7 +298,9 @@ public class OrdersAction extends BaseAction
             findUser.setStatusDate(new Date());//
           }
           //买的产品是零售产品
-          if("7".equals(findOrders.getProductId())) {
+          product = this.productService.findById(Product.class, Integer.parseInt(findOrders.getProductId()));
+          productLevel = product.getLevel();
+          if(level398 == productLevel) {
         	  
         	  //从订单中更新卡密信息
         	  String summary = "卡密信息:<br/>";
@@ -307,8 +317,6 @@ public class OrdersAction extends BaseAction
               double remainMoney  = findOrders.getMoney();
               if(findUser.getReBuyStatus()==1) {//是复购
             	  
-            	  //保存user，之后的操作与user无关
-            	  this.userService.saveOrUpdate(findUser);
             	  
             	  //获取用户的推荐人链表
                   String superListStr = findUser.getSuperior();
@@ -480,6 +488,7 @@ public class OrdersAction extends BaseAction
                       commission.setDeleted(false);
                       commission.setLevel(superList.length-1-i+1);
                       this.commissionService.saveOrUpdate(commission);
+                      
                   }
               }else {//不是复购
 
@@ -667,6 +676,9 @@ public class OrdersAction extends BaseAction
             	  
               }
 
+        	  //保存user，之后的操作与user无关
+        	  this.userService.saveOrUpdate(findUser);
+        	  
               summary = summary + "剩余金额："+remainMoney+"<br/>";
               //将订单描述存入订单中,保存订单信息
               findOrders.setStatus(Integer.valueOf(1));//更新订单支付状态（已支付）
@@ -693,9 +705,8 @@ public class OrdersAction extends BaseAction
      	      this.financialService.saveOrUpdate(financial);
      	      
           }//买的产品是市场开拓产品
-          else if("8".equals(findOrders.getProductId()) || "9".equals(findOrders.getProductId()) ||
-        		  "10".equals(findOrders.getProductId()) || "11".equals(findOrders.getProductId()) ||
-        		  "12".equals(findOrders.getProductId())) {
+          else if(level990 == productLevel || level3980 == productLevel ||  level10000 == productLevel || level100000 == productLevel ||
+        		  level200000 == productLevel) {
 
         	  //从订单中更新卡密信息
         	  String summary = "卡密信息:<br/>";
@@ -709,8 +720,6 @@ public class OrdersAction extends BaseAction
                 this.kamiService.saveOrUpdate(kami);
               }
               
-              //保存user，之后的操作与user无关
-        	  this.userService.saveOrUpdate(findUser);
         	  
         	  //获取用户的推荐人链表
               String superListStr = findUser.getSuperior();
@@ -800,6 +809,8 @@ public class OrdersAction extends BaseAction
               summary = summary + "剩余金额："+remainMoney+"<br/>";
               //将订单描述存入订单中,保存订单信息
 
+              //保存user，之后的操作与user无关
+        	  this.userService.saveOrUpdate(findUser);
               findOrders.setStatus(Integer.valueOf(1));//更新订单支付状态（已支付）
               findOrders.setSummary(summary);
               findOrders.setPayDate(date);

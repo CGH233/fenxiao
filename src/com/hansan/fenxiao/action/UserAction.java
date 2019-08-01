@@ -139,6 +139,9 @@ import java.io.PrintStream;
      } else if (tjrUser.getStatus().intValue() == 0) {
        json.put("status", "0");
        json.put("message", "推荐人未激活");
+     } else if (tjrUser.getLevel() <= 1){
+    	json.put("status", "0");
+        json.put("message", "推荐人权限不足"); 
      } else {
        try {
          String ip = IpUtils.getIpAddress(this.request);
