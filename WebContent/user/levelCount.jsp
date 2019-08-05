@@ -8,6 +8,30 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!-- <!DOCTYPE html> -->
 <html>
 <head>
+<style type="text/css">
+table.imagetable {
+font-family: verdana,arial,sans-serif;
+font-size:11px;
+color:#333333;
+border-width: 1px;
+border-color: #999999;
+border-collapse: collapse;
+}
+table.imagetable th {
+background:#b5cfd2 url('cell-blue.jpg');
+border-width: 1px;
+padding: 8px;
+border-style: solid;
+border-color: #999999;
+}
+table.imagetable td {
+background:#dcddc0 url('cell-yellow.jpg');
+border-width: 1px;
+padding: 8px;
+border-style: solid;
+border-color: #999999;
+}
+</style>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -21,14 +45,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script async="" src="../js/analytics.js"></script>
 	<script type="text/javascript" async="" src="../js/da_opt.js"></script>
 	<script type="text/javascript" src="../js/jquery.min.js"></script>
+	
 	<script>
-    $(function(){
+    $(function(){    	
 		$.ajax({
 		    url: "levelUserList",
 		    type: "GET",
 		    dataType: "json",
 		    async: false,
-		    success: function(data) {
+		    success: function(data) {		    	
 		        $("#allLevelNum").html(data.allLevelNum);
 		        $("#firstLevelNum").html(data.firstLevelNum);
 		        $("#secondLevelNum").html(data.secondLevelNum);
@@ -36,6 +61,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		        $("#todayRegUserNum").html(data.todayRegUserNum);
 		        $("#todayStatusUserNum").html(data.todayStatusUserNum);
 		        $("#unStatusUserNum").html(data.unStatusUserNum);
+		        var list = eval(JSON.stringify(data.userList));		
+		        var str = '';
+		        for (i in list) {  
+		        	 str += "<tr>" +  
+		        	 "<td>" + list[i].name + "</td>" +  
+		        	 "<td>" + list[i].phone + "</td>" +  
+		        	 "<td>" + list[i].level + "</td>" +  		        	                       
+		        	 "</tr>";  
+		     	}  
+		        $("#table").append(str); 		     		   
 		    }
 		});
 	});
@@ -55,6 +90,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				0
 			</div>
 		</div>
+											 		   	
+			<table class="imagetable" width="96%" align="center">
+				<thead>	
+				<tr>	
+					<th>昵称</th>
+					<th>电话</th>
+					<th>身份</th>	
+				</tr>	
+				</thead>			
+			<tbody id="table">			 
+		</tbody>	
+		</table>		
+		
+		
+		<!-- 
 		<div class="input-a sn-block wbox mt30 pr">
 			<span>第1级人数:</span>
 			<div class="wbox-flex ml30 pr" id="firstLevelNum">
@@ -72,7 +122,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div class="wbox-flex ml30 pr" id="thirdLevelNum">
 				0
 			</div>
-		</div>
+		</div> 
 		<div class="input-a sn-block wbox mt30 pr">
 			<span>当日注册人数:</span>
 			<div class="wbox-flex ml30 pr" id="todayRegUserNum">
@@ -90,7 +140,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div class="wbox-flex ml30 pr" id="unStatusUserNum">
 				0
 			</div>
-		</div>
+		</div>-->
 	</section>
 	<script type="text/javascript" src="../js/zepto.min.js"></script>
 
