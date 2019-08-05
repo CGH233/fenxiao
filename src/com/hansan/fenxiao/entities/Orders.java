@@ -87,7 +87,7 @@
    }
    public Double getProductMoney() {
      return this.productMoney;
-   }
+   }  
    public void setProductMoney(Double productMoney) {
      this.productMoney = productMoney;
    }

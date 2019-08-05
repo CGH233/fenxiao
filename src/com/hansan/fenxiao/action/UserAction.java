@@ -1,6 +1,7 @@
  package com.hansan.fenxiao.action;
  
- import com.alibaba.fastjson.JSONObject;
+ import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.google.zxing.WriterException;
 import com.hansan.fenxiao.entities.BounsRule;
 import com.hansan.fenxiao.entities.Config;
@@ -26,7 +27,8 @@ import java.io.OutputStream;
 import java.io.PrintStream;
  import java.io.PrintWriter;
  import java.text.SimpleDateFormat;
- import java.util.Date;
+import java.util.ArrayList;
+import java.util.Date;
  import java.util.HashMap;
  import java.util.List;
  import java.util.Map;
@@ -707,77 +709,94 @@ import java.io.PrintStream;
    public void levelUserList() {
      HttpSession session = this.request.getSession();
      User loginUser = (User)session.getAttribute("loginUser");
+     loginUser = this.userService.findById(User.class, loginUser.getId());
      List<User> levelUserList = this.userService.levelUserList(loginUser.getNo());
+     JSONArray userList = new JSONArray();    
+     
+//     int firstLevelNum = 0;
+// 
+//     int secondLevelNum = 0;
+// 
+//     int thirdLevelNum = 0;
  
-     int firstLevelNum = 0;
+     int allLevelNum = 0;
  
-     int secondLevelNum = 0;
- 
-     int thirdLevelNum = 0;
- 
-     int allLevelNum = levelUserList.size();
- 
-     int unStatusUserNum = 0;
- 
-     int todayRegUserNum = 0;
- 
-     int todayStatusUserNum = 0;
+//     int unStatusUserNum = 0;
+// 
+//     int todayRegUserNum = 0;
+// 
+//     int todayStatusUserNum = 0;
  
      for (User user : levelUserList)
      {
-       if (user.getStatus().intValue() == 0) {
-         unStatusUserNum++;
-       }
-       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//       if (user.getStatus().intValue() == 0) {
+//         unStatusUserNum++;
+//       }
+//       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+// 
+//       String todayDate = sdf.format(new Date());
+// 
+//       String createDate = sdf.format(user.getCreateDate());
+// 
+//       String statusDate = "";
+//       if (user.getStatusDate() != null) {
+//         statusDate = sdf.format(user.getStatusDate());
+//       }
+// 
+//       if (StringUtils.equals(createDate, todayDate)) {
+//         todayRegUserNum++;
+//       }
+// 
+//       if (StringUtils.equals(statusDate, todayDate)) {
+//         todayStatusUserNum++;
+//       }
  
-       String todayDate = sdf.format(new Date());
- 
-       String createDate = sdf.format(user.getCreateDate());
- 
-       String statusDate = "";
-       if (user.getStatusDate() != null) {
-         statusDate = sdf.format(user.getStatusDate());
-       }
- 
-       if (StringUtils.equals(createDate, todayDate)) {
-         todayRegUserNum++;
-       }
- 
-       if (StringUtils.equals(statusDate, todayDate)) {
-         todayStatusUserNum++;
-       }
- 
-       String levelNos = user.getSuperior();
-       if (!StringUtils.isEmpty(levelNos)) {
-         String[] leverNoArr = levelNos.split(";");
-         int i = leverNoArr.length - 1; for (int j = 1; i > 0; j++) {
-           if (!StringUtils.isEmpty(leverNoArr[i])) {
-             User levelUser = this.userService.getUserByNo(leverNoArr[i]);
-             if (levelUser != null)
+//       String levelNos = user.getSuperior();
+//       if (!StringUtils.isEmpty(levelNos)) {
+//    	 
+//         String[] leverNoArr = levelNos.split(";");
+//         
+//         int i = leverNoArr.length - 1;
+         
+//         for (int j = 1; i > 0; j++) {       	
+//           if (!StringUtils.isEmpty(leverNoArr[i])) {
+//             User levelUser = this.userService.getUserByNo(leverNoArr[i]);
+             if (user != null)
              {
-               if ((j == 1) && (StringUtils.equals(loginUser.getNo(), leverNoArr[i])))
-                 firstLevelNum++;
-               else if ((j == 2) && (StringUtils.equals(loginUser.getNo(), leverNoArr[i])))
-                 secondLevelNum++;
-               else if ((j == 3) && (StringUtils.equals(loginUser.getNo(), leverNoArr[i])))
-                 thirdLevelNum++;
+            	 JSONObject user1 = new JSONObject();           	 
+            	 if (user.getLevel() < loginUser.getLevel() && user.getLevel() >= 1) {            		 
+//		               if ((j == 1) && (StringUtils.equals(loginUser.getNo(), leverNoArr[i])))
+//		                 firstLevelNum++;
+//		               else if ((j == 2) && (StringUtils.equals(loginUser.getNo(), leverNoArr[i])))
+//		                 secondLevelNum++;
+//		               else if ((j == 3) && (StringUtils.equals(loginUser.getNo(), leverNoArr[i])))
+//		                 thirdLevelNum++;
+            		   
+		               BounsRule identity = this.bounsRuleService.bounsRuleByLevel(user.getLevel());
+		               user1.put("name", user.getName());
+		               user1.put("phone", user.getPhone());
+		               user1.put("level", identity.getIdentityName());
+		               userList.add(user1);
+		               allLevelNum += 1; 
+            	 }           	
              }
            }
-           i--;
-         }
+//           i--;
+//         }
  
-       }
+//       }
  
-     }
- 
-     JSONObject json = new JSONObject();
-     json.put("firstLevelNum", Integer.valueOf(firstLevelNum));
-     json.put("secondLevelNum", Integer.valueOf(secondLevelNum));
-     json.put("thirdLevelNum", Integer.valueOf(thirdLevelNum));
+//     }
+     
+     JSONObject json = new JSONObject();   
+     json.put("userList", userList);
+//     json.put("firstLevelNum", Integer.valueOf(firstLevelNum));
+//     json.put("secondLevelNum", Integer.valueOf(secondLevelNum));
+//     json.put("thirdLevelNum", Integer.valueOf(thirdLevelNum));
      json.put("allLevelNum", Integer.valueOf(allLevelNum));
-     json.put("unStatusUserNum", Integer.valueOf(unStatusUserNum));
-     json.put("todayRegUserNum", Integer.valueOf(todayRegUserNum));
-     json.put("todayStatusUserNum", Integer.valueOf(todayStatusUserNum));
+//     json.put("unStatusUserNum", Integer.valueOf(unStatusUserNum));
+//     json.put("todayRegUserNum", Integer.valueOf(todayRegUserNum));
+//     json.put("todayStatusUserNum", Integer.valueOf(todayStatusUserNum));
      PrintWriter out = null;
      try {
        out = this.response.getWriter();
