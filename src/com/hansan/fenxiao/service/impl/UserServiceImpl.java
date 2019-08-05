@@ -22,9 +22,9 @@
      return this.userDao.getUserByName(name);
    }
  
-   public User login(String name, String password)
+   public User login(String phone, String password)
    {
-     return this.userDao.login(name, password);
+     return this.userDao.login(phone, password);
    }
  
    public User getUserByPhone(String phone)

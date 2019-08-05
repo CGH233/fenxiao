@@ -32,11 +32,11 @@
      return user;
    }
  
-   public User login(String name, String password)
+   public User login(String phone, String password)
    {
-     String hql = "from User where name=:name and password=:password and deleted=0";
+     String hql = "from User where phone=:phone and password=:password and deleted=0";
      User user = (User)getSession().createQuery(hql)
-       .setString("name", name).setString("password", password).uniqueResult();
+       .setString("phone", phone).setString("password", password).uniqueResult();
      return user;
    }
  

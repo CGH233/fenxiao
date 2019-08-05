@@ -17,6 +17,7 @@ import com.hansan.fenxiao.service.IConfigService;
  import com.hansan.fenxiao.utils.IpUtils;
  import com.hansan.fenxiao.utils.Md5;
 import com.hansan.fenxiao.utils.VisualQRCode;
+import com.sun.xml.internal.bind.v2.model.core.ID;
 
 import freemarker.template.Configuration;
 
@@ -40,7 +41,8 @@ import java.util.Date;
  import javax.servlet.http.HttpServletResponse;
  import javax.servlet.http.HttpSession;
  import org.apache.commons.lang3.StringUtils;
- import org.json.JSONException;
+import org.aspectj.weaver.patterns.ThisOrTargetAnnotationPointcut;
+import org.json.JSONException;
  import org.springframework.context.annotation.Scope;
  import org.springframework.stereotype.Controller;
  
@@ -131,19 +133,22 @@ import java.util.Date;
        json.put("status", "0");
        json.put("message", "账号已存在");
      } 
-//       else if (this.userService.getUserByPhone(this.user.getPhone()) != null) {
-//       json.put("status", "0");
-//       json.put("message", "手机号已存在");
-//     } 
-     else if (tjrUser == null) {
+       else if (this.userService.getUserByPhone(this.user.getPhone()) != null) {
        json.put("status", "0");
-       json.put("message", "推荐人不存在");
-     } else if (tjrUser.getStatus().intValue() == 0) {
+       json.put("message", "手机号已存在");
+     } 
+//     else if (tjrUser == null) {
+//       json.put("status", "0");
+//       json.put("message", "推荐人不存在");
+//     } 
+     else if (tjrUser != null) {
+    	if (tjrUser.getStatus().intValue() == 0) {
        json.put("status", "0");
        json.put("message", "推荐人未激活");
-     } else if (tjrUser.getLevel() <= 1){
-    	json.put("status", "0");
-        json.put("message", "推荐人权限不足"); 
+     } else if (tjrUser.getLevel() <= 1) {
+	    	json.put("status", "0");
+	        json.put("message", "推荐人权限不足");
+    	 }
      } else {
        try {
          String ip = IpUtils.getIpAddress(this.request);
@@ -152,13 +157,25 @@ import java.util.Date;
          this.user.setRegisterIp("0.0.0.0");
        }
        //上级关系转接，保证无上限
-       if (StringUtils.isEmpty(tjrUser.getSuperior())) {
-         this.user.setSuperior(";" + tuijianren + ";");
+       int arealevel = 4;
+       if (tjrUser == null){
+    	   List<User> aList = this.userService.list("from User where deleted = 0 and level = "+ arealevel);
+    	   for (User user:aList) {
+    		   if (user.getAddress().split("\\|")[2] == area) {
+    			   tjrUser = user;
+    			   tuijianren = user.getNo();
+    		   }
+    	   }    	   
        }
-//       else if (tjrUser.getSuperior().split(";").length > 3)
-//         this.user.setSuperior(";" + tjrUser.getSuperior().split(";", 3)[2] + tuijianren + ";");
-       else {
-         this.user.setSuperior(tjrUser.getSuperior() + tuijianren + ";");
+       if (tjrUser != null) {
+	       if (StringUtils.isEmpty(tjrUser.getSuperior())) {
+	         this.user.setSuperior(";" + tuijianren + ";");
+	       }
+	//       else if (tjrUser.getSuperior().split(";").length > 3)
+	//         this.user.setSuperior(";" + tjrUser.getSuperior().split(";", 3)[2] + tuijianren + ";");
+	       else {
+	         this.user.setSuperior(tjrUser.getSuperior() + tuijianren + ";");
+	       } 
        }
  
        this.user.setPassword(Md5.getMD5Code(this.user.getPassword()));
@@ -194,6 +211,7 @@ import java.util.Date;
        }
      }
      try {
+    	 this.request.setAttribute("user", user);
     	 this.request.setAttribute("status", json.get("status").toString());
 		 this.request.setAttribute("message", json.get("message").toString());
     	 if (json.get("status") == "0") {	 
@@ -369,17 +387,18 @@ import java.util.Date;
        json.put("status", "0");
        json.put("message", "参数错误");
      } else {
-       User loginUser = this.userService.login(this.user.getName(), Md5.getMD5Code(this.user.getPassword()));
+    	User user1 = this.userService.getUserByPhone(this.user.getName());
+       User loginUser = this.userService.login(user1.getPhone(), Md5.getMD5Code(this.user.getPassword()));
        if (loginUser == null) {
          json.put("status", "0");
-         json.put("message", "用户名或者密码错误");
+         json.put("message", "手机号或者密码错误");
        }
        else {
          loginUser.setLoginCount(Integer.valueOf(loginUser.getLoginCount().intValue() + 1));
          session.setAttribute("loginUser", loginUser);
          try
          {
-           String ip = IpUtils.getIpAddress(this.request);
+           String ip = IpUtils.getIpAddress(this.request);          
            loginUser.setLastLoginIp(ip);
          } catch (Exception e) {
            loginUser.setLastLoginIp("0.0.0.0");
