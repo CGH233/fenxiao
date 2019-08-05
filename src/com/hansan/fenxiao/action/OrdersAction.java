@@ -138,10 +138,10 @@ public class OrdersAction extends BaseAction
            this.request.setAttribute("message", "您未登陆或者登陆失效，请重新登陆");
        } else {
     	   User user = this.userService.getUserByName(loginUser.getName());
-    	   if (user.getLevel() < findProduct.getLevel() && findProduct.getLevel() > level398) {
-    		   this.request.setAttribute("status", "0");
-               this.request.setAttribute("message", "您的权限不足，无法购买此产品");
-    	   }else {
+//    	   if (user.getLevel() < findProduct.getLevel() && findProduct.getLevel() > level398) {
+//    		   this.request.setAttribute("status", "0");
+//               this.request.setAttribute("message", "您的权限不足，无法购买此产品");
+//    	   }else {
 	    	   if (user.getReBuyStatus() == 1 && findProduct.getLevel() == level398) {
 	    		     findProduct.setMoney(findProduct.getRebuy());
 	    	   }
@@ -150,7 +150,7 @@ public class OrdersAction extends BaseAction
 	    	   	this.request.setAttribute("product", findProduct);
     	   }
        }
-    }
+//    }
     try {
       this.request.getRequestDispatcher("cart.jsp").forward(this.request, this.response);
     } catch (ServletException e) {
@@ -300,11 +300,16 @@ public class OrdersAction extends BaseAction
           //买的产品是零售产品
           product = this.productService.findById(Product.class, Integer.parseInt(findOrders.getProductId()));
           productLevel = product.getLevel();
+          String superListStr = findUser.getSuperior();
+          double remainMoney  = findOrders.getMoney();
+          Date date = new Date();
+          String summary = "卡密信息:<br/>";
+         
           if(level398 == productLevel) {
-        	  
+        	  if (superListStr != null) {
         	  //从订单中更新卡密信息
-        	  String summary = "卡密信息:<br/>";
-              Date date = new Date();
+        	  summary = "卡密信息:<br/>";
+              date = new Date();
               for (Kami kami : kamiList) {
                 summary = summary + "卡号:" + kami.getNo() + ",密码:" + kami.getPassword() + "<br/>";
                 //更新kami状态
@@ -314,12 +319,12 @@ public class OrdersAction extends BaseAction
                 this.kamiService.saveOrUpdate(kami);
               }
 
-              double remainMoney  = findOrders.getMoney();
+              
               if(findUser.getReBuyStatus()==1) {//是复购
             	  
             	  
             	  //获取用户的推荐人链表
-                  String superListStr = findUser.getSuperior();
+                  superListStr = findUser.getSuperior();
                   String[] superList = superListStr.split(";");
                   
                   //设置三个boolean, 记录2级之后的管理奖是否被分完了，为true代表还没分，为false代表已经被分出去了。
@@ -502,7 +507,8 @@ public class OrdersAction extends BaseAction
             	  this.userService.saveOrUpdate(findUser);
             	  
             	  //获取用户的推荐人链表
-                  String superListStr = findUser.getSuperior();
+                  superListStr = findUser.getSuperior();
+                  
                   String[] superList = superListStr.split(";");
                   
                   //设置三个boolean, 记录2级之后的管理奖是否被分完了，为true代表还没分，为false代表已经被分出去了。
@@ -675,8 +681,9 @@ public class OrdersAction extends BaseAction
                   }
             	  
               }
-
+        	  }
         	  //保存user，之后的操作与user无关
+              findUser.setLevel(product.getLevel());
         	  this.userService.saveOrUpdate(findUser);
         	  
               summary = summary + "剩余金额："+remainMoney+"<br/>";
@@ -708,9 +715,11 @@ public class OrdersAction extends BaseAction
           else if(level990 == productLevel || level3980 == productLevel ||  level10000 == productLevel || level100000 == productLevel ||
         		  level200000 == productLevel) {
 
-        	  //从订单中更新卡密信息
-        	  String summary = "卡密信息:<br/>";
-              Date date = new Date();
+        	  
+        	  if (superListStr != null) {
+        		//从订单中更新卡密信息
+        	  summary = "卡密信息:<br/>";
+        	  date = new Date();
               for (Kami kami : kamiList) {
                 summary = summary + "卡号:" + kami.getNo() + ",密码:" + kami.getPassword() + "<br/>";
                 //更新kami状态
@@ -722,14 +731,15 @@ public class OrdersAction extends BaseAction
               
         	  
         	  //获取用户的推荐人链表
-              String superListStr = findUser.getSuperior();
+              superListStr = findUser.getSuperior();
+             
               String[] superList = superListStr.split(";");
               
               //设置三个boolean, 记录2级之后的管理奖是否被分完了，为true代表还没分，为false代表已经被分出去了。
               boolean areaReward=true;
               boolean MainReward=true;
               boolean shareholderReward=true;
-              double remainMoney  = findOrders.getMoney();
+              remainMoney  = findOrders.getMoney();
               
               //第一个是空值,所以不遍历第一个,从尾部开始遍历
               for(int i=superList.length-1;i>0;i--) {
@@ -919,13 +929,14 @@ public class OrdersAction extends BaseAction
                       break;
             	  }
               }
-              
-              
+          }
+          	
               summary = summary + "剩余金额："+remainMoney+"<br/>";
-              
+          
               //将订单描述存入订单中,保存订单信息
 
               //保存user，之后的操作与user无关
+              findUser.setLevel(product.getLevel());
         	  this.userService.saveOrUpdate(findUser);
               findOrders.setStatus(Integer.valueOf(1));//更新订单支付状态（已支付）
               findOrders.setSummary(summary);
@@ -960,9 +971,9 @@ public class OrdersAction extends BaseAction
               
               findOrders.setStatus(Integer.valueOf(1));//更新订单支付状态（已支付）
               
-              
-              String summary = "卡密信息:<br/>";
-              Date date = new Date();
+              if (superListStr != null) {
+              summary = "卡密信息:<br/>";
+              date = new Date();
               for (Kami kami : kamiList) {
                 summary = summary + "卡号:" + kami.getNo() + ",密码:" + kami.getPassword() + "<br/>";
                 //更新kami状态
@@ -1040,11 +1051,12 @@ public class OrdersAction extends BaseAction
 
               }
 
-          }
+          }          
           
           json.put("status", "1");
           json.put("message", "付款成功");
           json.put("no", findOrders.getNo());
+        }
         }
       }
     }

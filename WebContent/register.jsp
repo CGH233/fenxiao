@@ -57,6 +57,7 @@ alert("<%=errorInfo%>");                                            // 弹出错
 	</div>
 	<section class="sn-main pr">
 		<form action="register()" class="pageForm" data-toggle="validate" data-reload-navtab="true">
+		<% if (errorInfo == null) {%>
 		<div class="input-a sn-block wbox mt30 pr">
 			<span>编号</span>
 			<div class="wbox-flex ml30 pr">
@@ -65,9 +66,52 @@ alert("<%=errorInfo%>");                                            // 弹出错
 			<em class="delete" style="display:none" name="Wap_reg_person_001"></em>
 		</div>
 		<div class="input-a sn-block wbox mt30 pr">
-			<span>用户名</span>
+			<span>真实姓名</span>
 			<div class="wbox-flex ml30 pr">
-				<input type="text" id="name" name="user.name" value="" placeholder="请输入用户名" maxlength="32">	
+				<input type="text" id="name" name="user.name" value="${user.name}" placeholder="请输入真实姓名" maxlength="32">	
+			</div>
+			<em class="delete" style="display:none" name="Wap_reg_person_001"></em>
+		</div>
+		<div class="input-a sn-block wbox mt30 pr">
+			<span>手机号</span>
+			<div class="wbox-flex ml30 pr">
+				<input type="tel" id="phone" name="user.phone" value="${user.phone}" placeholder="请输入11位手机号码" maxlength="11">	
+			</div>
+			<em class="delete" style="display:none" name="Wap_reg_person_001"></em>
+		</div>
+		<div class="input-a sn-block wbox mt30 pr">
+			<span>密码</span>
+			<div class="wbox-flex ml30 pr">
+				<input type="password" id="password" name="user.password" value="${user.password}" placeholder="请输入密码" maxlength="32">	
+			</div>
+			<em class="delete" style="display:none" name="Wap_reg_person_001"></em>
+		</div>
+		<div class="input-a sn-block wbox mt30 pr">
+			<span>确认密码</span>
+			<div class="wbox-flex ml30 pr">
+				<input type="password" id="repassword" value="${user.password}" placeholder="请重新输入密码" maxlength="32">	
+			</div>
+			<em class="delete" style="display:none" name="Wap_reg_person_001"></em>
+		</div>
+		<div class="input-a sn-block wbox mt30 pr">
+			<span>推荐人</span>
+			<div class="wbox-flex ml30 pr">
+				<input type="text" id="tuijianren" name="tuijianren" value="${tuijianren}" placeholder="请输入推荐人编号" maxlength="32">	
+			</div>
+			<em class="delete" style="display:none" name="Wap_reg_person_001"></em>
+		</div>
+		<% }else{ %>
+		<div class="input-a sn-block wbox mt30 pr">
+			<span>编号</span>
+			<div class="wbox-flex ml30 pr">
+				<input type="text" id="no" name="user.no" value="" placeholder="请刷新生成编号" maxlength="6" readonly="readonly">	
+			</div>
+			<em class="delete" style="display:none" name="Wap_reg_person_001"></em>
+		</div>
+		<div class="input-a sn-block wbox mt30 pr">
+			<span>真实姓名</span>
+			<div class="wbox-flex ml30 pr">
+				<input type="text" id="name" name="user.name" value="" placeholder="请输入真实姓名" maxlength="32">	
 			</div>
 			<em class="delete" style="display:none" name="Wap_reg_person_001"></em>
 		</div>
@@ -99,6 +143,7 @@ alert("<%=errorInfo%>");                                            // 弹出错
 			</div>
 			<em class="delete" style="display:none" name="Wap_reg_person_001"></em>
 		</div>
+		<%} %>
 		<div class="input-a sn-block wbox mt30 pr">
 			<span>地址</span>
 			<select id="cmbProvince" name="cmbProvince" value=""></select>
