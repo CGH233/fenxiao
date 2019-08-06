@@ -79,6 +79,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 			<em class="delete" style="display:none" name="Wap_reg_person_001"></em>
 		</div>
+		<!--
 		<div class="input-a sn-block wbox mt30 pr">
 			<span>登录次数:</span>
 			<div class="wbox-flex ml30 pr">
@@ -86,7 +87,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 			<em class="delete" style="display:none" name="Wap_reg_person_001"></em>
 		</div>
-		<div class="input-a sn-block wbox mt30 pr">
+		 <div class="input-a sn-block wbox mt30 pr">
 			<span>上次登录时间:</span>
 			<div class="wbox-flex ml30 pr">
 				<fmt:formatDate value="${loginUser.lastLoginTime}" pattern="yyyy-MM-dd HH:mm:ss" />
@@ -100,6 +101,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 			<em class="delete" style="display:none" name="Wap_reg_person_001"></em>
 		</div>
+		 -->
 		<a href="changePassword.jsp" name="Wap_reg_person_005" class="first-step sn-btn sn-btn-big sn-btn-block m30 sn-btn-positive">修改密码</a>
 	</section>
 	<script type="text/javascript" src="../js/zepto.min.js"></script>

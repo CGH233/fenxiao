@@ -57,14 +57,9 @@ alert("<%=errorInfo%>");                                            // 弹出错
 	</div>
 	<section class="sn-main pr">
 		<form action="register()" class="pageForm" data-toggle="validate" data-reload-navtab="true">
+		<input type="hidden" id="no" name="user.no" value="" placeholder="请刷新生成编号" maxlength="6" readonly="readonly">	
 		<% if (errorInfo != null) {%>
-		<div class="input-a sn-block wbox mt30 pr">
-			<span>编号</span>
-			<div class="wbox-flex ml30 pr">
-				<input type="text" id="no" name="user.no" value="" placeholder="请刷新生成编号" maxlength="6" readonly="readonly">	
-			</div>
-			<em class="delete" style="display:none" name="Wap_reg_person_001"></em>
-		</div>
+		<input type="hidden" id="tuijianren" name="tuijianren" value="${tuijianren}" placeholder="请输入推荐人电话号码" maxlength="32">		
 		<div class="input-a sn-block wbox mt30 pr">
 			<span>真实姓名</span>
 			<div class="wbox-flex ml30 pr">
@@ -92,22 +87,8 @@ alert("<%=errorInfo%>");                                            // 弹出错
 				<input type="password" id="repassword" name="repassword" value="${repassword}" placeholder="请重新输入密码" maxlength="32">	
 			</div>
 			<em class="delete" style="display:none" name="Wap_reg_person_001"></em>
-		</div>
-		<div class="input-a sn-block wbox mt30 pr">
-			<span>推荐人电话</span>
-			<div class="wbox-flex ml30 pr">
-				<input type="text" id="tuijianren" name="tuijianren" value="${tuijianren}" placeholder="请输入推荐人电话号码" maxlength="32">	
-			</div>
-			<em class="delete" style="display:none" name="Wap_reg_person_001"></em>
-		</div>
-		<% }else{ %>
-		<div class="input-a sn-block wbox mt30 pr">
-			<span>编号</span>
-			<div class="wbox-flex ml30 pr">
-				<input type="text" id="no" name="user.no" value="" placeholder="请刷新生成编号" maxlength="6" readonly="readonly">	
-			</div>
-			<em class="delete" style="display:none" name="Wap_reg_person_001"></em>
-		</div>
+		</div>	
+		<% }else{ %>						
 		<div class="input-a sn-block wbox mt30 pr">
 			<span>真实姓名</span>
 			<div class="wbox-flex ml30 pr">
@@ -136,13 +117,7 @@ alert("<%=errorInfo%>");                                            // 弹出错
 			</div>
 			<em class="delete" style="display:none" name="Wap_reg_person_001"></em>
 		</div>
-		<div class="input-a sn-block wbox mt30 pr">
-			<span>推荐人</span>
-			<div class="wbox-flex ml30 pr">
-				<input type="text" id="tuijianren" name="tuijianren" value="" placeholder="请输入推荐人编号" maxlength="32">	
-			</div>
-			<em class="delete" style="display:none" name="Wap_reg_person_001"></em>
-		</div>
+		<input type="hidden" id="tuijianren" name="tuijianren" value="" placeholder="请输入推荐人编号" maxlength="32">				
 		<%} %>
 		<div class="input-a sn-block wbox mt30 pr">
 			<span>地址</span>
