@@ -358,11 +358,11 @@ public class OrdersAction extends BaseAction
                 		  diUser.setCommission(Double.valueOf(diUser.getCommission().doubleValue() + commissionNum));//更新佣金总额
                           this.userService.saveOrUpdate(diUser);
                           //更新订单中的描述
-                          summary=summary+diUser.getNo()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
+                          summary=summary+diUser.getPhone()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
                         		  "直接推荐人复购奖励："+commissionNum+"<br/>";
                           
                           
-                          commission.setRemark("来自用户（编号："+loginUser.getName()+",用户名："+loginUser.getName()+
+                          commission.setRemark("来自用户（手机号："+loginUser.getPhone()+",用户名："+loginUser.getName()+
                         		  				"）购买产品 ["+findOrders.getProductName()+"] 的直接推荐复购奖励");
                           remainMoney = remainMoney - commissionNum;
                 		  
@@ -381,11 +381,11 @@ public class OrdersAction extends BaseAction
                 		  diUser.setCommission(Double.valueOf(diUser.getCommission().doubleValue() + commissionNum));//更新佣金总额
                           this.userService.saveOrUpdate(diUser);
                           //更新订单中的描述
-                          summary=summary+diUser.getNo()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
+                          summary=summary+diUser.getPhone()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
                         		  "间接直接推荐人复购奖励："+commissionNum+"<br/>";
                           
                           
-                          commission.setRemark("来自用户（编号："+loginUser.getName()+",用户名："+loginUser.getName()+
+                          commission.setRemark("来自用户（手机号："+loginUser.getPhone()+",用户名："+loginUser.getName()+
                         		  				"）购买产品 ["+findOrders.getProductName()+"] 的间接推荐复购奖励");
                           remainMoney = remainMoney - commissionNum;
                 	  }//二级之后的管理奖
@@ -407,7 +407,7 @@ public class OrdersAction extends BaseAction
                         		  diUser.setCommission(Double.valueOf(diUser.getCommission().doubleValue() + commissionNum));//更新佣金总额
                                   this.userService.saveOrUpdate(diUser);
                                   //更新订单中的描述
-                                  summary=summary+diUser.getNo()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
+                                  summary=summary+diUser.getPhone()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
                                 		  "2级之后总代管理复购奖励："+commissionNum+"<br/>";
                                   
                                   
@@ -432,11 +432,11 @@ public class OrdersAction extends BaseAction
                         		  diUser.setCommission(Double.valueOf(diUser.getCommission().doubleValue() + commissionNum));//更新佣金总额
                                   this.userService.saveOrUpdate(diUser);
                                   //更新订单中的描述
-                                  summary=summary+diUser.getNo()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
+                                  summary=summary+diUser.getPhone()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
                                 		  "2级之后区域管理复购奖励："+commissionNum+"<br/>";
                                   
                                   
-                                  commission.setRemark("来自用户（编号："+loginUser.getName()+",用户名："+loginUser.getName()+
+                                  commission.setRemark("来自用户（手机号："+loginUser.getPhone()+",用户名："+loginUser.getName()+
                                 		  				"）购买产品 ["+findOrders.getProductName()+"] 的2级之后区域管理复购奖励");
                                   remainMoney = remainMoney - commissionNum;
                                   
@@ -457,11 +457,11 @@ public class OrdersAction extends BaseAction
                         		  diUser.setCommission(Double.valueOf(diUser.getCommission().doubleValue() + commissionNum));//更新佣金总额
                                   this.userService.saveOrUpdate(diUser);
                                   //更新订单中的描述
-                                  summary=summary+diUser.getNo()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
+                                  summary=summary+diUser.getPhone()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
                                 		  "2级之后社区管理复购奖励："+commissionNum+"<br/>";
                                   
                                   
-                                  commission.setRemark("来自用户（编号："+loginUser.getName()+",用户名："+loginUser.getName()+
+                                  commission.setRemark("来自用户（手机号："+loginUser.getPhone()+",用户名："+loginUser.getName()+
                                 		  				"）购买产品 ["+findOrders.getProductName()+"] 的2级之后社区管理复购奖励");
                                   remainMoney = remainMoney - commissionNum;
                                   
@@ -542,11 +542,11 @@ public class OrdersAction extends BaseAction
                 		  diUser.setCommission(Double.valueOf(diUser.getCommission().doubleValue() + commissionNum));//更新佣金总额
                           this.userService.saveOrUpdate(diUser);
                           //更新订单中的描述
-                          summary=summary+diUser.getNo()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
+                          summary=summary+diUser.getPhone()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
                         		  "直接推荐人奖励："+commissionNum+"<br/>";
                           
                           
-                          commission.setRemark("来自用户（编号："+loginUser.getName()+",用户名："+loginUser.getName()+
+                          commission.setRemark("来自用户（手机号："+loginUser.getPhone()+",用户名："+loginUser.getName()+
                         		  				"）购买产品 ["+findOrders.getProductName()+"] 的直接推荐奖励");
                           remainMoney = remainMoney - commissionNum;
                 		  
@@ -565,11 +565,11 @@ public class OrdersAction extends BaseAction
                 		  diUser.setCommission(Double.valueOf(diUser.getCommission().doubleValue() + commissionNum));//更新佣金总额
                           this.userService.saveOrUpdate(diUser);
                           //更新订单中的描述
-                          summary=summary+diUser.getNo()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
+                          summary=summary+diUser.getPhone()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
                         		  "间接直接推荐人奖励："+commissionNum+"<br/>";
                           
                           
-                          commission.setRemark("来自用户（编号："+loginUser.getName()+",用户名："+loginUser.getName()+
+                          commission.setRemark("来自用户（手机号："+loginUser.getPhone()+",用户名："+loginUser.getName()+
                         		  				"）购买产品 ["+findOrders.getProductName()+"] 的间接推荐奖励");
                           remainMoney = remainMoney - commissionNum;
                           
@@ -592,11 +592,11 @@ public class OrdersAction extends BaseAction
                         		  diUser.setCommission(Double.valueOf(diUser.getCommission().doubleValue() + commissionNum));//更新佣金总额
                                   this.userService.saveOrUpdate(diUser);
                                   //更新订单中的描述
-                                  summary=summary+diUser.getNo()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
+                                  summary=summary+diUser.getPhone()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
                                 		  "2级之后总代管理奖励："+commissionNum+"<br/>";
                                   
                                   
-                                  commission.setRemark("来自用户（编号："+loginUser.getName()+",用户名："+loginUser.getName()+
+                                  commission.setRemark("来自用户（手机号："+loginUser.getPhone()+",用户名："+loginUser.getName()+
                                 		  				"）购买产品 ["+findOrders.getProductName()+"] 的2级之后总代管理奖励");
                                   remainMoney = remainMoney - commissionNum;
                                   
@@ -617,11 +617,11 @@ public class OrdersAction extends BaseAction
                         		  diUser.setCommission(Double.valueOf(diUser.getCommission().doubleValue() + commissionNum));//更新佣金总额
                                   this.userService.saveOrUpdate(diUser);
                                   //更新订单中的描述
-                                  summary=summary+diUser.getNo()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
+                                  summary=summary+diUser.getPhone()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
                                 		  "2级之后区域管理奖励："+commissionNum+"<br/>";
                                   
                                   
-                                  commission.setRemark("来自用户（编号："+loginUser.getName()+",用户名："+loginUser.getName()+
+                                  commission.setRemark("来自用户（手机号："+loginUser.getPhone()+",用户名："+loginUser.getName()+
                                 		  				"）购买产品 ["+findOrders.getProductName()+"] 的2级之后区域管理奖励");
                                   remainMoney = remainMoney - commissionNum;
                                   
@@ -642,11 +642,11 @@ public class OrdersAction extends BaseAction
                         		  diUser.setCommission(Double.valueOf(diUser.getCommission().doubleValue() + commissionNum));//更新佣金总额
                                   this.userService.saveOrUpdate(diUser);
                                   //更新订单中的描述
-                                  summary=summary+diUser.getNo()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
+                                  summary=summary+diUser.getPhone()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
                                 		  "2级之后社区管理奖励："+commissionNum+"<br/>";
                                   
                                   
-                                  commission.setRemark("来自用户（编号："+loginUser.getName()+",用户名："+loginUser.getName()+
+                                  commission.setRemark("来自用户（手机号："+loginUser.getPhone()+",用户名："+loginUser.getName()+
                                 		  				"）购买产品 ["+findOrders.getProductName()+"] 的2级之后社区管理奖励");
                                   remainMoney = remainMoney - commissionNum;
                                   
@@ -768,11 +768,11 @@ public class OrdersAction extends BaseAction
             		  diUser.setCommission(Double.valueOf(diUser.getCommission().doubleValue() + commissionNum));//更新佣金总额
                       this.userService.saveOrUpdate(diUser);
                       //更新订单中的描述
-                      summary=summary+diUser.getNo()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
+                      summary=summary+diUser.getPhone()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
                     		  "直接推荐人奖励："+commissionNum+"<br/>";
                       
                       
-                      commission.setRemark("来自用户（编号："+loginUser.getName()+",用户名："+loginUser.getName()+
+                      commission.setRemark("来自用户（手机号："+loginUser.getPhone()+",用户名："+loginUser.getName()+
                     		  				"）购买产品 ["+findOrders.getProductName()+"] 的直接推荐奖励");
                       remainMoney = remainMoney - commissionNum;
                       commission.setType(Integer.valueOf(1));
@@ -799,11 +799,11 @@ public class OrdersAction extends BaseAction
             		  diUser.setCommission(Double.valueOf(diUser.getCommission().doubleValue() + commissionNum));//更新佣金总额
                       this.userService.saveOrUpdate(diUser);
                       //更新订单中的描述
-                      summary=summary+diUser.getNo()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
+                      summary=summary+diUser.getPhone()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
                     		  "间接直接推荐人奖励："+commissionNum+"<br/>";
                       
                       
-                      commission.setRemark("来自用户（编号："+loginUser.getName()+",用户名："+loginUser.getName()+
+                      commission.setRemark("来自用户（手机号："+loginUser.getPhone()+",用户名："+loginUser.getName()+
                     		  				"）购买产品 ["+findOrders.getProductName()+"] 的间接推荐奖励");
                       remainMoney = remainMoney - commissionNum;
                       commission.setType(Integer.valueOf(1));
@@ -844,11 +844,11 @@ public class OrdersAction extends BaseAction
                 		  commissionNum = Double.parseDouble(rewardString);
             		  }
             		  commissionNum = Double.valueOf(String .format("%.2f", commissionNum));
-            		  summary=summary+puser.getNo()+" "+puser.getName()+" "+bounsRule.getIdentityName()+" "+
+            		  summary=summary+puser.getPhone()+" "+puser.getName()+" "+bounsRule.getIdentityName()+" "+
                     		  "区域奖励："+commissionNum+"<br/>";
                       
                       
-                      commission.setRemark("来自用户（编号："+loginUser.getName()+",用户名："+loginUser.getName()+
+                      commission.setRemark("来自用户（手机号："+loginUser.getPhone()+",用户名："+loginUser.getName()+
                     		  				"）购买产品 ["+findOrders.getProductName()+"] 的"+bounsRule.getIdentityName()+"区域奖励");
                       remainMoney = remainMoney - commissionNum;
                       remainMoney = Double.valueOf(String .format("%.2f", remainMoney));
@@ -878,11 +878,11 @@ public class OrdersAction extends BaseAction
                 		  commissionNum = Double.parseDouble(rewardString);
             		  }
             		  commissionNum = Double.valueOf(String .format("%.2f", commissionNum));
-            		  summary=summary+cuser.getNo()+" "+cuser.getName()+" "+bounsRule.getIdentityName()+" "+
+            		  summary=summary+cuser.getPhone()+" "+cuser.getName()+" "+bounsRule.getIdentityName()+" "+
                     		  "区域奖励："+commissionNum+"<br/>";
                       
                       
-                      commission.setRemark("来自用户（编号："+loginUser.getName()+",用户名："+loginUser.getName()+
+                      commission.setRemark("来自用户（手机号："+loginUser.getPhone()+",用户名："+loginUser.getName()+
                     		  				"）购买产品 ["+findOrders.getProductName()+"] 的"+bounsRule.getIdentityName()+"区域奖励");
                       remainMoney = remainMoney - commissionNum;
                       commission.setType(Integer.valueOf(1));
@@ -911,11 +911,11 @@ public class OrdersAction extends BaseAction
                 		  commissionNum = Double.parseDouble(rewardString);
             		  }
             		  commissionNum = Double.valueOf(String .format("%.2f", commissionNum));
-            		  summary=summary+auser.getNo()+" "+auser.getName()+" "+bounsRule.getIdentityName()+" "+
+            		  summary=summary+auser.getPhone()+" "+auser.getName()+" "+bounsRule.getIdentityName()+" "+
                     		  "区域奖励："+commissionNum+"<br/>";
                       
                       
-                      commission.setRemark("来自用户（编号："+loginUser.getName()+",用户名："+loginUser.getName()+
+                      commission.setRemark("来自用户（手机号："+loginUser.getPhone()+",用户名："+loginUser.getName()+
                     		  				"）购买产品 ["+findOrders.getProductName()+"] 的"+bounsRule.getIdentityName()+"区域奖励");
                       remainMoney = remainMoney - commissionNum;
                       commission.setType(Integer.valueOf(1));
@@ -1044,7 +1044,7 @@ public class OrdersAction extends BaseAction
                       commission.setCreateDate(date);
                       commission.setDeleted(false);
                       commission.setLevel(Integer.valueOf(j));
-                      commission.setRemark("第" + j + "级用户:编号【" + loginUser.getNo() + "】购买商品奖励");
+                      commission.setRemark("第" + j + "级用户:手机号【" + loginUser.getPhone() + "】购买商品奖励");
                       this.commissionService.saveOrUpdate(commission);
                     }
                   }

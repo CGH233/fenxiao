@@ -401,15 +401,15 @@ import org.json.JSONException;
      String prePage = (String) session.getAttribute("prePage");
      //session.removeAttribute("prePage");
      JSONObject json = new JSONObject();
-     if (this.user == null) {
+     User user1 = this.userService.getUserByPhone(this.user.getName());
+     if (this.user == null || user1 == null) {
        json.put("status", "0");
-       json.put("message", "参数错误");
-     } else {
-    	User user1 = this.userService.getUserByPhone(this.user.getName());
+       json.put("message", "手机号错误");
+     } else {   	
        User loginUser = this.userService.login(user1.getPhone(), Md5.getMD5Code(this.user.getPassword()));
        if (loginUser == null) {
          json.put("status", "0");
-         json.put("message", "手机号或者密码错误");
+         json.put("message", "密码错误");
        }
        else {
          loginUser.setLoginCount(Integer.valueOf(loginUser.getLoginCount().intValue() + 1));
