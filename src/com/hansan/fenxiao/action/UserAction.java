@@ -118,56 +118,68 @@ import org.json.JSONException;
        e.printStackTrace();
      }
      String tuijianren = this.request.getParameter("tuijianren");
+     String rePassword = this.request.getParameter("repassword");
      String province = this.request.getParameter("cmbProvince");
      String city = this.request.getParameter("cmbCity");
      String area = this.request.getParameter("cmbArea");
      String address = province+"|"+city+"|"+area;
-     
-     
-     User tjrUser = this.userService.getUserByNo(tuijianren);
+    
+     User tjrUser = this.userService.getUserByPhone(tuijianren);
+     if (tjrUser != null) tuijianren = tjrUser.getNo();
      JSONObject json = new JSONObject();
+     json.put("status", "0");
      if (this.user == null) {
-       json.put("status", "0");
+//       json.put("status", "0");
        json.put("message", "参数错误");
-     } else if (this.userService.getUserByName(this.user.getName()) != null) {
-       json.put("status", "0");
+     } else if (this.user.getName().isEmpty()) {
+//       json.put("status", "0");
+       json.put("message", "姓名为空");
+     } else if (this.user.getPhone().isEmpty()) {
+//       json.put("status", "0");
+       json.put("message", "手机号为空");
+     }
+     else if (this.user.getPassword().isEmpty()) {
+//       json.put("status", "0");
+       json.put("message", "密码为空");
+     }else if (!this.user.getPassword().equals(rePassword)) {
+//       json.put("status", "0");
+       json.put("message", "两次密码输入不一致");
+     }
+     else if (this.userService.getUserByName(this.user.getName()) != null) {
+//       json.put("status", "0");
        json.put("message", "账号已存在");
-     } 
+     }
        else if (this.userService.getUserByPhone(this.user.getPhone()) != null) {
-       json.put("status", "0");
+//       json.put("status", "0");
        json.put("message", "手机号已存在");
      } 
 //     else if (tjrUser == null) {
 //       json.put("status", "0");
 //       json.put("message", "推荐人不存在");
 //     } 
-     else if (tjrUser != null) {
+     else if (tjrUser == null){
+    	int arealevel = 4;
+  	   List<User> aList = this.userService.list("from User where deleted = 0 and level = "+ arealevel);
+  	   for (User user:aList) {
+  		   if (user.getAddress().split("\\|")[2] == area) {
+  			   tjrUser = user;
+  			   tuijianren = user.getNo();
+  		   }
+  	   }    	   
+     }
+     if (tjrUser != null) {
     	if (tjrUser.getStatus().intValue() == 0) {
-       json.put("status", "0");
+//       json.put("status", "0");
        json.put("message", "推荐人未激活");
      } else if (tjrUser.getLevel() <= 1) {
-	    	json.put("status", "0");
+//	    	json.put("status", "0");
 	        json.put("message", "推荐人权限不足");
-    	 }
      } else {
-       try {
-         String ip = IpUtils.getIpAddress(this.request);
-         this.user.setRegisterIp(ip);
-       } catch (Exception e) {
-         this.user.setRegisterIp("0.0.0.0");
-       }
+       
        //上级关系转接，保证无上限
-       int arealevel = 4;
-       if (tjrUser == null){
-    	   List<User> aList = this.userService.list("from User where deleted = 0 and level = "+ arealevel);
-    	   for (User user:aList) {
-    		   if (user.getAddress().split("\\|")[2] == area) {
-    			   tjrUser = user;
-    			   tuijianren = user.getNo();
-    		   }
-    	   }    	   
-       }
-       if (tjrUser != null) {
+    
+       
+       
 	       if (StringUtils.isEmpty(tjrUser.getSuperior())) {
 	         this.user.setSuperior(";" + tuijianren + ";");
 	       }
@@ -177,7 +189,13 @@ import org.json.JSONException;
 	         this.user.setSuperior(tjrUser.getSuperior() + tuijianren + ";");
 	       } 
        }
- 
+     }
+     try {
+         String ip = IpUtils.getIpAddress(this.request);
+         this.user.setRegisterIp(ip);
+       } catch (Exception e) {
+         this.user.setRegisterIp("0.0.0.0");
+       }
        this.user.setPassword(Md5.getMD5Code(this.user.getPassword()));
        this.user.setLoginCount(Integer.valueOf(0));
        this.user.setStatus(Integer.valueOf(0));
@@ -206,15 +224,15 @@ import org.json.JSONException;
          json.put("status", "1");
          json.put("message", "注册成功");
          } else {
-         json.put("status", "0");
+//         json.put("status", "0");
          json.put("message", "注册失败，请重试");
        }
-     }
      try {
-    	 this.request.setAttribute("user", user);
+    	 
     	 this.request.setAttribute("status", json.get("status").toString());
 		 this.request.setAttribute("message", json.get("message").toString());
-    	 if (json.get("status") == "0") {	 
+    	 if (json.get("status") == "0") {	
+    		 this.request.setAttribute("user", user);
     		 this.request.getRequestDispatcher("register.jsp").forward(this.request, this.response);
     	 }else {
     		 this.request.getRequestDispatcher("login.jsp").forward(this.request, this.response);

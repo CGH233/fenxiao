@@ -683,7 +683,8 @@ public class OrdersAction extends BaseAction
               }
         	  }
         	  //保存user，之后的操作与user无关
-              findUser.setLevel(product.getLevel());
+        	  if (findUser.getLevel() < product.getLevel())
+        		  findUser.setLevel(product.getLevel());
         	  this.userService.saveOrUpdate(findUser);
         	  
               summary = summary + "剩余金额："+remainMoney+"<br/>";
@@ -936,7 +937,8 @@ public class OrdersAction extends BaseAction
               //将订单描述存入订单中,保存订单信息
 
               //保存user，之后的操作与user无关
-              findUser.setLevel(product.getLevel());
+              if (findUser.getLevel() < product.getLevel())
+            	  findUser.setLevel(product.getLevel());
         	  this.userService.saveOrUpdate(findUser);
               findOrders.setStatus(Integer.valueOf(1));//更新订单支付状态（已支付）
               findOrders.setSummary(summary);
@@ -1053,10 +1055,11 @@ public class OrdersAction extends BaseAction
 
           }          
           
+          
+        }
           json.put("status", "1");
           json.put("message", "付款成功");
           json.put("no", findOrders.getNo());
-        }
         }
       }
     }
