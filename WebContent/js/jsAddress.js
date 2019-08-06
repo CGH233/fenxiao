@@ -2,7 +2,8 @@ var addressInit = function(_cmbProvince, _cmbCity, _cmbArea, defaultProvince, de
 {
 	var cmbProvince = document.getElementById(_cmbProvince);
 	var cmbCity = document.getElementById(_cmbCity);
-	var cmbArea = document.getElementById(_cmbArea);
+	
+	var cmbArea = document.getElementById(_cmbArea);  
 	
 	
 	
