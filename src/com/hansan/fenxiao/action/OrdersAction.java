@@ -137,7 +137,7 @@ public class OrdersAction extends BaseAction
            this.request.setAttribute("status", "0");
            this.request.setAttribute("message", "您未登陆或者登陆失效，请重新登陆");
        } else {
-    	   User user = this.userService.getUserByName(loginUser.getName());
+    	   User user = this.userService.getUserByPhone(loginUser.getPhone());
 //    	   if (user.getLevel() < findProduct.getLevel() && findProduct.getLevel() > level398) {
 //    		   this.request.setAttribute("status", "0");
 //               this.request.setAttribute("message", "您的权限不足，无法购买此产品");
