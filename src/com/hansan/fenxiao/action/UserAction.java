@@ -158,7 +158,7 @@ import org.json.JSONException;
 //       json.put("message", "推荐人不存在");
 //     } 
      else if (tjrUser == null){
-    	int arealevel = 4;
+     int arealevel = 4;
   	   List<User> aList = this.userService.list("from User where deleted = 0 and level = "+ arealevel);
   	   for (User user:aList) {
   		   if (user.getAddress().split("\\|")[2] == area) {
