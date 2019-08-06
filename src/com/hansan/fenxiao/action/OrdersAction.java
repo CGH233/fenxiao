@@ -1060,6 +1060,7 @@ public class OrdersAction extends BaseAction
           json.put("status", "1");
           json.put("message", "付款成功");
           json.put("no", findOrders.getNo());
+          
         }
       }
     }
@@ -1069,6 +1070,10 @@ public class OrdersAction extends BaseAction
       out = this.response.getWriter();
     } catch (IOException e) {
       e.printStackTrace();
+    }
+    if (json.get("status") == "1") {
+    	loginUser.setStatus(1);
+    	session.setAttribute("loginUser", loginUser);
     }
     out.print(json.toString());
     out.flush();
