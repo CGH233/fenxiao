@@ -124,7 +124,7 @@ import org.json.JSONException;
      String area = this.request.getParameter("cmbArea");
      String address = province+"|"+city+"|"+area;
     
-     User tjrUser = this.userService.getUserByPhone(tuijianren);
+     User tjrUser = this.userService.getUserByNo(tuijianren);
      if (tjrUser != null) tuijianren = tjrUser.getNo();
      JSONObject json = new JSONObject();
      json.put("status", "0");
@@ -466,17 +466,18 @@ import org.json.JSONException;
        User loginUser = (User)session.getAttribute("loginUser");
        
        String bgImgUrl = UserAction.class.getClassLoader().getResource("../../images/bgimg.jpg").getPath(); //背景图片地址
-       String content = "http://"+this.request.getServerName()+"fenxiao/register.jsp?tuijianren="+loginUser.getPhone(); //二维码内容，指向注册地址
+       String content = "http://"+this.request.getServerName()+":"+this.request.getServerPort()+"/fenxiao/register.jsp?tuijianren="+loginUser.getNo(); //二维码内容，指向注册地址
+       
        
        //测试内容
        //String contentTest = "http://aiwac.net/fenxiao/register.jsp?tuijianren="+loginUser.getPhone();
-       
+       System.out.println(content);
        try {
     	   OutputStream output = this.response.getOutputStream();
            VisualQRCode.createQRCode(content,
         	   bgImgUrl, 
                output, 
-               'H', 
+               'M', 
                new Color(70, 130, 180), 
                250, //二维码x轴起点
                1000, //二维码y轴起点
@@ -801,7 +802,7 @@ import org.json.JSONException;
              if (user != null)
              {
             	 JSONObject user1 = new JSONObject();           	 
-            	 if (user.getLevel() < loginUser.getLevel() && user.getLevel() >= 1) {            		 
+            	 if (user.getLevel() < loginUser.getLevel()) {            		 
 //		               if ((j == 1) && (StringUtils.equals(loginUser.getNo(), leverNoArr[i])))
 //		                 firstLevelNum++;
 //		               else if ((j == 2) && (StringUtils.equals(loginUser.getNo(), leverNoArr[i])))

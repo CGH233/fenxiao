@@ -188,11 +188,11 @@ $(function(){
                             <ul id="bjui-tree0" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="true">
                                 <li data-id="10" data-pid="1" data-url="configEdit" data-tabid="configEdit">系统设置</li>
                                 <li data-id="18" data-pid="1" data-url="adminList" data-tabid="adminList">管理员列表</li>
-                                <li data-id="11" data-pid="1" data-url="articleCateList" data-tabid="articleCateList">文章栏目</li>
-                                <li data-id="12" data-pid="1" data-url="articleList" data-tabid="articleList">文章管理</li>
+                                <!--  <li data-id="11" data-pid="1" data-url="articleCateList" data-tabid="articleCateList">文章栏目</li>
+                                <li data-id="12" data-pid="1" data-url="articleList" data-tabid="articleList">文章管理</li> -->
                                 <li data-id="12" data-pid="1" data-url="productCateList" data-tabid="productCateList">产品分类</li>
                                 <li data-id="12" data-pid="1" data-url="productList" data-tabid="productList">产品管理</li>
-                                <li data-id="15" data-pid="1" data-url="messageList" data-tabid="messageList">留言管理</li>
+                                <!-- <li data-id="15" data-pid="1" data-url="messageList" data-tabid="messageList">留言管理</li> -->
                                 <li data-id="15" data-pid="1" data-url="ordersList" data-tabid="ordersList">订单管理</li>
                                 <li data-id="15" data-pid="1" data-url="userList" data-tabid="userList">会员管理</li>
                                 <li data-id="15" data-pid="1" data-url="financialList" data-tabid="financialList">财务明细</li>
