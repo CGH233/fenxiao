@@ -466,14 +466,14 @@ import org.json.JSONException;
        User loginUser = (User)session.getAttribute("loginUser");
        
        String bgImgUrl = UserAction.class.getClassLoader().getResource("../../images/bgimg.jpg").getPath(); //背景图片地址
-       String content = "http://"+this.request.getServerName()+"fenxiao/register.jsp?tuijianren="+loginUser.getNo(); //二维码内容，指向注册地址
+       String content = "http://"+this.request.getServerName()+"fenxiao/register.jsp?tuijianren="+loginUser.getPhone(); //二维码内容，指向注册地址
        
        //测试内容
-       String contentTest = "http://aiwac.net/fenxiao/register.jsp?tuijianren="+loginUser.getNo();
+       //String contentTest = "http://aiwac.net/fenxiao/register.jsp?tuijianren="+loginUser.getPhone();
        
        try {
     	   OutputStream output = this.response.getOutputStream();
-           VisualQRCode.createQRCode(contentTest,
+           VisualQRCode.createQRCode(content,
         	   bgImgUrl, 
                output, 
                'H', 
@@ -812,7 +812,11 @@ import org.json.JSONException;
 		               BounsRule identity = this.bounsRuleService.bounsRuleByLevel(user.getLevel());
 		               user1.put("name", user.getName());
 		               user1.put("phone", user.getPhone());
-		               user1.put("level", identity.getIdentityName());
+		               if (identity != null) {
+		            	   user1.put("level", identity.getIdentityName());
+		               } else {
+		            	   user1.put("level", "非会员");
+		               }
 		               userList.add(user1);
 		               allLevelNum += 1; 
             	 }           	
