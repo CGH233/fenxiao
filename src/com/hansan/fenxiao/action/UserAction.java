@@ -478,9 +478,9 @@ import org.json.JSONException;
                output, 
                'H', 
                new Color(70, 130, 180), 
-               250, 
-               405, 
-               200, 
+               250, //二维码x轴起点
+               1000, //二维码y轴起点
+               200, //二维码宽度
                false,
                VisualQRCode.POSITION_DETECTION_SHAPE_MODEL_ROUND_RECTANGLE, 
                VisualQRCode.FILL_SHAPE_MODEL_RECTANGLE);
