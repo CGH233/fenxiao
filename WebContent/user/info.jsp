@@ -44,13 +44,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</div>
 
 	<section class="sn-main pr">
-		<div class="input-a sn-block wbox mt30 pr">
+		<!-- <div class="input-a sn-block wbox mt30 pr">
 			<span>编号:</span>
 			<div class="wbox-flex ml30 pr">
 				${loginUser.no }
 			</div>
 			<em class="delete" style="display:none" name="Wap_reg_person_001"></em>
 		</div>
+		 -->
 		<div class="input-a sn-block wbox mt30 pr">
 			<span>用户名:</span>
 			<div class="wbox-flex ml30 pr">

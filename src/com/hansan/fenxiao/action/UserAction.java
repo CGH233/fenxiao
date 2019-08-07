@@ -472,6 +472,7 @@ import org.json.JSONException;
        //测试内容
        //String contentTest = "http://aiwac.net/fenxiao/register.jsp?tuijianren="+loginUser.getPhone();
        System.out.println(content);
+       session.setAttribute("link", content);
        try {
     	   OutputStream output = this.response.getOutputStream();
            VisualQRCode.createQRCode(content,
@@ -484,7 +485,7 @@ import org.json.JSONException;
                200, //二维码宽度
                false,
                VisualQRCode.POSITION_DETECTION_SHAPE_MODEL_ROUND_RECTANGLE, 
-               VisualQRCode.FILL_SHAPE_MODEL_RECTANGLE);
+               VisualQRCode.FILL_SHAPE_MODEL_RECTANGLE);        
        } catch (IOException e) {
            e.printStackTrace();
        }

@@ -8,6 +8,30 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!-- <!DOCTYPE html> -->
 <html>
  <head>
+  <style type="text/css">
+table.imagetable {
+font-family: verdana,arial,sans-serif;
+font-size:11px;
+color:#333333;
+border-width: 1px;
+border-color: #999999;
+border-collapse: collapse;
+}
+table.imagetable th {
+background:#b5cfd2 url('cell-blue.jpg');
+border-width: 1px;
+padding: 8px;
+border-style: solid;
+border-color: #999999;
+}
+table.imagetable td {
+background:#dcddc0 url('cell-yellow.jpg');
+border-width: 1px;
+padding: 8px;
+border-style: solid;
+border-color: #999999;
+}
+</style>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
@@ -101,7 +125,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        </c:if>
        <c:if test="${orders.status==1 }">已付款</c:if>
        </p>
-       <p><label class="w3">订单摘要</label>：${orders.summary }</p>
+       <!-- 
+       <p><label class="w3">订单摘要</label>
+       		<table class="imagetable" width="80%" align="center">      		
+	       		<tr>
+	       			<td align="center">
+		       			购买人
+		       		</td>    			
+		       		<td align="center">
+		       			${sessionScope.loginUser.name}
+		       		</td>
+	       		</tr>      			
+       		</table>
+       	</p>
+       	 -->
       </div></li>
     </ul>
    </div>
