@@ -54,6 +54,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   		window.location.href="ordersSave?pid="+pid;
   	}
   </script>
+
+</head>  
+</html> 
  </head>
  <body>
   <section class="ww" style="min-height:11rem;">
@@ -132,7 +135,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    </div>
   </section>
   <c:if test="${requestScope.status==1 }">
+ 
   <section class="cart-foot-bar hide" id="cartTotal" style="display: block;">
+  	
    <div class="cart-fixed">
     <div class="wbox pd">
      <div class="wbox-flex sn-txt-muted">
@@ -142,7 +147,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       </div>
      </div>
      <div class="cart-btn-box" id="goSettlement">
-      <a href="javascript:ordersSave();" class="sn-btn sn-btn-assertive sn-btn-big">结算</a>
+      <a href="javascript:ordersSave();" class="sn-btn sn-btn-assertive sn-btn-big">结算</a>   	
      </div>
     </div>
    </div>
