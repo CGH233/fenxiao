@@ -256,13 +256,16 @@ public class OrdersAction extends BaseAction
  */
   public void pay()
   {
+	int reward = Integer.parseInt(this.request.getParameter("reward"));
     String no = this.request.getParameter("no");//订单号
     Orders findOrders = this.ordersService.findByNo(no);//订单
     HttpSession session = this.request.getSession();
     User loginUser = (User)session.getAttribute("loginUser");//登录用户
+    loginUser = this.userService.getUserByNo(loginUser.getNo());
+    Double existCommission = loginUser.getCommission();
+    String summary = "";
     Product product = new Product();
-    int productLevel = 0;
-    
+    int productLevel = 0;    
     JSONObject json = new JSONObject();
     if ((loginUser == null) || (loginUser.getId() == null)) {
       json.put("status", "0");
@@ -278,7 +281,7 @@ public class OrdersAction extends BaseAction
     	//登录用户和订单用户不一致
         json.put("status", "0");
         json.put("message", "没有权限");
-      } else if (findUser.getBalance().doubleValue() < findOrders.getMoney().doubleValue()) {
+      } else if (findUser.getBalance().doubleValue() + existCommission < findOrders.getMoney().doubleValue()) {
         json.put("status", "0");
         json.put("message", "余额不足，请先充值");
       } else if (findOrders.getStatus().intValue() == 1) {
@@ -291,7 +294,21 @@ public class OrdersAction extends BaseAction
           json.put("status", "0");
           json.put("message", "库存不足，请联系管理员");
         } else {
-          findUser.setBalance(Double.valueOf(findUser.getBalance().doubleValue() - findOrders.getMoney().doubleValue()));//更新金额总数
+        	//更新用户资金，含佣金抵扣
+        	if (reward == 1) {           	
+            	if (existCommission <= findOrders.getMoney()) {
+            		findUser.setBalance(Double.valueOf(findUser.getBalance().doubleValue() - findOrders.getMoney().doubleValue())+existCommission);//更新金额总数
+            		findUser.setCommission(0.00);
+            		summary += "本次购买使用佣金抵扣 ￥"+ existCommission + "元 <br>";
+            	}else {
+            		existCommission -= findOrders.getMoney();
+            		findUser.setCommission(existCommission);
+            		summary += "本次购买使用佣金抵扣 ￥"+ findOrders.getMoney() + "元 <br>";
+            	}            	
+            }else {
+            	findUser.setBalance(Double.valueOf(findUser.getBalance().doubleValue() - findOrders.getMoney().doubleValue()));//更新金额总数
+            }
+          
           //如果用户未激活，则激活用户，并记录激活时间
           if (findUser.getStatus().intValue() == 0) {
             findUser.setStatus(Integer.valueOf(1));
@@ -303,21 +320,21 @@ public class OrdersAction extends BaseAction
           String superListStr = findUser.getSuperior();
           double remainMoney  = findOrders.getMoney();
           Date date = new Date();
-          String summary = "卡密信息:<br/>";
+          
          
           if(level398 == productLevel) {
         	  if (superListStr != null) {
         	  //从订单中更新卡密信息
-        	  summary = "卡密信息:<br/>";
-              date = new Date();
-              for (Kami kami : kamiList) {
-                summary = summary + "卡号:" + kami.getNo() + ",密码:" + kami.getPassword() + "<br/>";
-                //更新kami状态
-                kami.setSaleTime(date);
-                kami.setOrdersNo(findOrders.getNo());
-                kami.setStatus(Integer.valueOf(1));
-                this.kamiService.saveOrUpdate(kami);
-              }
+//        	  summary = "卡密信息:<br/>";
+//              date = new Date();
+//              for (Kami kami : kamiList) {
+//                summary = summary + "卡号:" + kami.getNo() + ",密码:" + kami.getPassword() + "<br/>";
+//                //更新kami状态
+//                kami.setSaleTime(date);
+//                kami.setOrdersNo(findOrders.getNo());
+//                kami.setStatus(Integer.valueOf(1));
+//                this.kamiService.saveOrUpdate(kami);
+//              }
 
               
               if(findUser.getReBuyStatus()==1) {//是复购
@@ -685,6 +702,9 @@ public class OrdersAction extends BaseAction
         	  //保存user，之后的操作与user无关
         	  if (findUser.getLevel() < product.getLevel())
         		  findUser.setLevel(product.getLevel());
+        	  if (findUser.getReBuyStatus() == 0 && product.getLevel() == level398) {
+            	  findUser.setReBuyStatus(Integer.valueOf(1));
+              }
         	  this.userService.saveOrUpdate(findUser);
         	  
               summary = summary + "剩余金额："+remainMoney+"<br/>";
@@ -719,16 +739,16 @@ public class OrdersAction extends BaseAction
         	  
         	  if (superListStr != null) {
         		//从订单中更新卡密信息
-        	  summary = "卡密信息:<br/>";
-        	  date = new Date();
-              for (Kami kami : kamiList) {
-                summary = summary + "卡号:" + kami.getNo() + ",密码:" + kami.getPassword() + "<br/>";
-                //更新kami状态
-                kami.setSaleTime(date);
-                kami.setOrdersNo(findOrders.getNo());
-                kami.setStatus(Integer.valueOf(1));
-                this.kamiService.saveOrUpdate(kami);
-              }
+//        	  summary = "卡密信息:<br/>";
+//        	  date = new Date();
+//              for (Kami kami : kamiList) {
+//                summary = summary + "卡号:" + kami.getNo() + ",密码:" + kami.getPassword() + "<br/>";
+//                //更新kami状态
+//                kami.setSaleTime(date);
+//                kami.setOrdersNo(findOrders.getNo());
+//                kami.setStatus(Integer.valueOf(1));
+//                this.kamiService.saveOrUpdate(kami);
+//              }
               
         	  
         	  //获取用户的推荐人链表
@@ -976,14 +996,14 @@ public class OrdersAction extends BaseAction
               if (superListStr != null) {
               summary = "卡密信息:<br/>";
               date = new Date();
-              for (Kami kami : kamiList) {
-                summary = summary + "卡号:" + kami.getNo() + ",密码:" + kami.getPassword() + "<br/>";
-                //更新kami状态
-                kami.setSaleTime(date);
-                kami.setOrdersNo(findOrders.getNo());
-                kami.setStatus(Integer.valueOf(1));
-                this.kamiService.saveOrUpdate(kami);
-              }
+//              for (Kami kami : kamiList) {
+//                summary = summary + "卡号:" + kami.getNo() + ",密码:" + kami.getPassword() + "<br/>";
+//                //更新kami状态
+//                kami.setSaleTime(date);
+//                kami.setOrdersNo(findOrders.getNo());
+//                kami.setStatus(Integer.valueOf(1));
+//                this.kamiService.saveOrUpdate(kami);
+//              }
               findOrders.setSummary(summary);
               findOrders.setPayDate(date);
               this.ordersService.saveOrUpdate(findOrders);
