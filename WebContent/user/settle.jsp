@@ -19,9 +19,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <script type="text/javascript" src="../js/jquery.min.js"></script>
   <script type="text/javascript" src="../js/zepto.min.js"></script>
   <script type="text/javascript">
-  function pay(){
+  var reward = 0;
+  function rewardCheck()
+	{
+		var mymessage=confirm("是否使用佣金抵扣");
+		if(mymessage==true)
+		{
+			reward=1;
+			pay();
+		}
+		else if(mymessage==false)
+		{			
+			pay();
+		}
+	}
+  function pay(){  	
   		$.ajax({
-	        url: "../ordersPay?no=${requestScope.orders.no }",
+	        url: "../ordersPay?no=${requestScope.orders.no }&reward="+reward,
 	        type: "get",
 	        dataType: "json",
 	        async: false,
@@ -71,7 +85,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <li><label>支付方式</label>
        <div class="wbox-flex tr">
         <div id="selectShipModel" style="-webkit-transform-origin: 0px 0px 0px; opacity: 1; -webkit-transform: scale(1, 1);">
-         	余额支付
+        	余额支付
         </div>
        </div></li>
      </ul>
@@ -139,7 +153,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       </div>
      </div>
      <div class="cart-btn-box">
-      <a href="javascript:pay()" id="submitOrderDivId" class="sn-btn sn-btn-assertive sn-btn-big">付款</a>
+      <a href="javascript:rewardCheck()" id="submitOrderDivId" class="sn-btn sn-btn-assertive sn-btn-big">付款</a>
      </div>
     </div>
    </div>

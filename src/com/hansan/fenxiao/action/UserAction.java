@@ -18,6 +18,15 @@ import com.hansan.fenxiao.service.IConfigService;
  import com.hansan.fenxiao.utils.Md5;
 import com.hansan.fenxiao.utils.VisualQRCode;
 import com.sun.xml.internal.bind.v2.model.core.ID;
+import com.hansan.fenxiao.utils.HttpURLConnection;
+import java.util.UUID;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Formatter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.io.UnsupportedEncodingException;  
+
 
 import freemarker.template.Configuration;
 
@@ -41,6 +50,7 @@ import java.util.Date;
  import javax.servlet.http.HttpServletResponse;
  import javax.servlet.http.HttpSession;
  import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.methods.HttpGet;
 import org.aspectj.weaver.patterns.ThisOrTargetAnnotationPointcut;
 import org.json.JSONException;
  import org.springframework.context.annotation.Scope;
@@ -67,7 +77,7 @@ import org.json.JSONException;
    private User user;
    private String ftlFileName;
  
-
+   private HttpURLConnection httpGetConnection;
    
    public void list()
    {
@@ -124,7 +134,7 @@ import org.json.JSONException;
      String area = this.request.getParameter("cmbArea");
      String address = province+"|"+city+"|"+area;
     
-     User tjrUser = this.userService.getUserByPhone(tuijianren);
+     User tjrUser = this.userService.getUserByNo(tuijianren);
      if (tjrUser != null) tuijianren = tjrUser.getNo();
      JSONObject json = new JSONObject();
      json.put("status", "0");
@@ -462,28 +472,39 @@ import org.json.JSONException;
  
    //二维码
    public void QRCode(){
+	   String tragetUrl = "http://"+this.request.getServerName()+":"+this.request.getServerPort()+"/fenxiao/user/promoteQRCode.jsp";
 	   HttpSession session = this.request.getSession();
        User loginUser = (User)session.getAttribute("loginUser");
+       String timestamp = (String)session.getAttribute("timestamp");
+       Long timeNow = System.currentTimeMillis() / 1000; 
+       if (timestamp == null ){
+    	   checkandsign(tragetUrl);
+       } else {
+    	   Long timeLast = Long.parseLong(timestamp);
+    	   if (timeNow - timeLast >= 7150) {
+    		   checkandsign(tragetUrl);
+    	   }
+       }
+       String bgImgUrl = UserAction.class.getClassLoader().getResource("../../images/code_image.jpg").getPath(); //背景图片地址
+       String content = "http://"+this.request.getServerName()+":"+this.request.getServerPort()+"/fenxiao/register.jsp?tuijianren="+loginUser.getNo(); //二维码内容，指向注册地址
        
-       String bgImgUrl = UserAction.class.getClassLoader().getResource("../../images/bgimg.jpg").getPath(); //背景图片地址
-       String content = "http://"+this.request.getServerName()+"fenxiao/register.jsp?tuijianren="+loginUser.getPhone(); //二维码内容，指向注册地址
        
        //测试内容
        //String contentTest = "http://aiwac.net/fenxiao/register.jsp?tuijianren="+loginUser.getPhone();
-       
+       session.setAttribute("link", content);
        try {
     	   OutputStream output = this.response.getOutputStream();
            VisualQRCode.createQRCode(content,
         	   bgImgUrl, 
                output, 
-               'H', 
+               'M', 
                new Color(70, 130, 180), 
                250, //二维码x轴起点
-               1000, //二维码y轴起点
+               950, //二维码y轴起点
                200, //二维码宽度
                false,
                VisualQRCode.POSITION_DETECTION_SHAPE_MODEL_ROUND_RECTANGLE, 
-               VisualQRCode.FILL_SHAPE_MODEL_RECTANGLE);
+               VisualQRCode.FILL_SHAPE_MODEL_RECTANGLE);        
        } catch (IOException e) {
            e.printStackTrace();
        }
@@ -801,7 +822,7 @@ import org.json.JSONException;
              if (user != null)
              {
             	 JSONObject user1 = new JSONObject();           	 
-            	 if (user.getLevel() < loginUser.getLevel() && user.getLevel() >= 1) {            		 
+            	 if (user.getLevel() < loginUser.getLevel()) {            		 
 //		               if ((j == 1) && (StringUtils.equals(loginUser.getNo(), leverNoArr[i])))
 //		                 firstLevelNum++;
 //		               else if ((j == 2) && (StringUtils.equals(loginUser.getNo(), leverNoArr[i])))
@@ -875,5 +896,92 @@ import org.json.JSONException;
      String b= "";
      String c = null;
      System.out.println(StringUtils.isEmpty(b));
+   }
+   
+   //生成微信验证签名部分
+   public Map checkandsign(String tragetUrl) {
+	   String url = "https://api.weixin.qq.com/cgi-bin/token?";
+       String[] keyStrings = {"grant_type", "appid", "secret"};
+	   Map<String, String> map = new HashMap<String, String>();
+	   map.put("grant_type", "client_credential");
+	   map.put("appid", "");
+	   map.put("secret", "");
+	   for(int i = 0;i < map.size();i++) {
+       	url += keyStrings[i] +"="+ map.get(keyStrings[i]);
+       	if (i != map.size() - 1) 
+       		url += "&";
+       }	
+	   String token = "";
+	   String ticket = "";
+	   token = this.httpGetConnection.sendGet(url);
+	   url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token="+token.split("\"")[3]+"&type=jsapi";
+	   ticket = this.httpGetConnection.sendGet(url);
+	   String jsapi_ticket = ticket.split("\"")[9];
+	   HttpSession session = this.request.getSession();
+	   
+       Map<String, String> ret = sign(jsapi_ticket, tragetUrl);
+       
+       session.setAttribute("signature", ret.get("signature"));
+       session.setAttribute("timestamp", ret.get("timestamp"));
+       session.setAttribute("appId", map.get("appid"));
+       session.setAttribute("nonceStr", ret.get("nonceStr"));
+       return ret;
+   };
+   
+
+   public static Map<String, String> sign(String jsapi_ticket, String url) {
+       Map<String, String> ret = new HashMap<String, String>();
+       String nonce_str = create_nonce_str();
+       String timestamp = create_timestamp();
+       String string1;
+       String signature = "";
+
+       //注意这里参数名必须全部小写，且必须有序
+       string1 = "jsapi_ticket=" + jsapi_ticket +
+                 "&noncestr=" + nonce_str +
+                 "&timestamp=" + timestamp +
+                 "&url=" + url;
+       try
+       {
+           MessageDigest crypt = MessageDigest.getInstance("SHA-1");
+           crypt.reset();
+           crypt.update(string1.getBytes("UTF-8"));
+           signature = byteToHex(crypt.digest());
+       }
+       catch (NoSuchAlgorithmException e)
+       {
+           e.printStackTrace();
+       }
+       catch (UnsupportedEncodingException e)
+       {
+           e.printStackTrace();
+       }
+
+       ret.put("url", url);
+       ret.put("jsapi_ticket", jsapi_ticket);
+       ret.put("nonceStr", nonce_str);
+       ret.put("timestamp", timestamp);
+       ret.put("signature", signature);
+
+       return ret;
+   }
+
+   private static String byteToHex(final byte[] hash) {
+       Formatter formatter = new Formatter();
+       for (byte b : hash)
+       {
+           formatter.format("%02x", b);
+       }
+       String result = formatter.toString();
+       formatter.close();
+       return result;
+   }
+
+   private static String create_nonce_str() {
+       return UUID.randomUUID().toString();
+   }
+
+   private static String create_timestamp() {
+       return Long.toString(System.currentTimeMillis() / 1000);
    }
  }
