@@ -19,7 +19,48 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script async="" src="../js/analytics.js"></script>
 	<script type="text/javascript" async="" src="../js/da_opt.js"></script>
 	<script type="text/javascript" src="../js/jquery.min.js"></script>
-	<script>
+	<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+	<script type="text/javascript">
+		wx.config({
+                    debug : false,
+                    appId : "${sessionScope.appId}",
+                    timestamp : "${sessionScope.timestamp}",
+                    nonceStr : "${sessionScope.nonceStr}",
+                    signature : "${sessionScope.signature}",
+                    jsApiList : [ 'checkJsApi', 'onMenuShareAppMessage']
+        });
+ 		wx.ready(function(){
+ 			wx.checkJsApi({
+ 				jsApiList: ['onMenuShareAppMessage'],
+ 					success: function(res) {
+ 						console.log(res);
+ 					}
+ 				})
+ 				
+ 			wx.onMenuShareAppMessage({
+ 			      title: '裤头方会员推荐注册',
+ 			      desc: '点击链接注册账号',
+ 			      link: '${sessionScope.link}',
+ 			      imgUrl: '',
+ 			      /*trigger: function (res) {
+ 			        alert('用户点击发送给朋友 ');
+ 			      },
+ 			      success: function (res) {
+ 			        alert('已分享');
+ 			      },
+ 			      cancel: function (res) {
+ 			        alert('已取消');
+ 			      },
+ 			      fail: function (res) {
+ 			        alert(JSON.stringify(res));
+ 			      }*/
+ 			})
+ 			
+ 		});
+ 		
+ 		wx.error(function (res) {
+ 			  alert(res.errMsg);
+ 		});
 	</script>
 </head>
 <body>
