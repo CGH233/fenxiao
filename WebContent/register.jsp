@@ -72,7 +72,7 @@ alert("<%=errorInfo%>");                                            // 弹出错
 			<div class="sn-nav-back">
 			<a class="sn-iconbtn" href="index.jsp">返回</a></div>
 			<div class="sn-nav-title of">注册</div>
-		</div>
+		</div>		
 		<section class="sn-main pr">
 			<form action="register()" class="pageForm" data-toggle="validate" data-reload-navtab="true">
 			<input type="hidden" id="no" name="user.no" value="" placeholder="请刷新生成编号" maxlength="6" readonly="readonly">			
