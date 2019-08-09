@@ -267,6 +267,7 @@ public class OrdersAction extends BaseAction
     Product product = new Product();
     int productLevel = 0;    
     JSONObject json = new JSONObject();
+    Double useReward = 0.00d;
     if ((loginUser == null) || (loginUser.getId() == null)) {
       json.put("status", "0");
       json.put("message", "您未登陆或者登陆失效，请重新登陆");
@@ -300,10 +301,12 @@ public class OrdersAction extends BaseAction
             		findUser.setBalance(Double.valueOf(findUser.getBalance().doubleValue() - findOrders.getMoney().doubleValue())+existCommission);//更新金额总数
             		findUser.setCommission(0.00);
             		summary += "本次购买使用佣金抵扣 ￥"+ existCommission + "元 <br>";
+            		useReward = existCommission;
             	}else {
             		existCommission -= findOrders.getMoney();
             		findUser.setCommission(existCommission);
             		summary += "本次购买使用佣金抵扣 ￥"+ findOrders.getMoney() + "元 <br>";
+            		useReward = findOrders.getMoney();
             	}            	
             }else {
             	findUser.setBalance(Double.valueOf(findUser.getBalance().doubleValue() - findOrders.getMoney().doubleValue()));//更新金额总数
@@ -1133,8 +1136,12 @@ public class OrdersAction extends BaseAction
           
           
         }
+          
           json.put("status", "1");
           json.put("message", "付款成功");
+          if (reward == 1) {
+        	  json.put("message", "付款成功，使用佣金抵扣 ￥"+useReward+"元");
+          }
           json.put("no", findOrders.getNo());
           
         }
