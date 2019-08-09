@@ -4,7 +4,7 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
-<!-- <!DOCTYPE html> -->
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -21,50 +21,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript" src="../js/jquery.min.js"></script>
 	<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
 	<script type="text/javascript">
-		/* wx.config({
-                    debug : false,
-                    appId : "${sessionScope.appId}",
-                    timestamp : "${sessionScope.timestamp}",
-                    nonceStr : "${sessionScope.nonceStr}",
-                    signature : "${sessionScope.signature}",
-                    jsApiList : [ 'checkJsApi', 'onMenuShareAppMessage']
-        });
- 		wx.ready(function(){
- 			wx.checkJsApi({
- 				jsApiList: ['onMenuShareAppMessage'],
- 					success: function(res) {
- 						console.log(res);
- 					}
- 				})
- 				
- 			wx.onMenuShareAppMessage({
- 			      title: '裤头方会员推荐注册',
- 			      desc: '点击链接注册账号',
- 			      link: '${sessionScope.link}',
- 			      imgUrl: '',
- 			      /*trigger: function (res) {
- 			        alert('用户点击发送给朋友 ');
- 			      },
- 			      success: function (res) {
- 			        alert('已分享');
- 			      },
- 			      cancel: function (res) {
- 			        alert('已取消');
- 			      },
- 			      fail: function (res) {
- 			        alert(JSON.stringify(res));
- 			      }*//*
- 			})
- 			
- 		});
- 		
- 		wx.error(function (res) {
- 			  alert(res.errMsg);
- 		}); */
 	</script>
+	
+<title>Insert title here</title>
 </head>
 <body>
-	<section class="sn-main pr">
+<section class="sn-main pr">
 	<c:if test="${sessionScope.loginUser.status==0 }">
 		<div class="input-a sn-block wbox mt30 pr">
 			<span><a href="../list.jsp">您的账号未激活，请先购买商品激活账号</a></span>
@@ -77,7 +39,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</a>
 		</div>
 	</c:if>
-	</section>
+</section>
 	<script type="text/javascript" src="../js/zepto.min.js"></script>
-
-</body></html>
+</body>
+</html>

@@ -53,7 +53,8 @@ import java.util.Date;
 import org.apache.http.client.methods.HttpGet;
 import org.aspectj.weaver.patterns.ThisOrTargetAnnotationPointcut;
 import org.json.JSONException;
- import org.springframework.context.annotation.Scope;
+import org.omg.CORBA.TCKind;
+import org.springframework.context.annotation.Scope;
  import org.springframework.stereotype.Controller;
  
  @Controller("userAction")
@@ -167,76 +168,76 @@ import org.json.JSONException;
 //       json.put("status", "0");
 //       json.put("message", "推荐人不存在");
 //     } 
-     else if (tjrUser == null){
-     int arealevel = 4;
-  	   List<User> aList = this.userService.list("from User where deleted = 0 and level = "+ arealevel);
-  	   for (User user:aList) {
-  		   if (user.getAddress().split("\\|")[2] == area) {
-  			   tjrUser = user;
-  			   tuijianren = user.getNo();
-  		   }
-  	   }    	   
-     }
-     if (tjrUser != null) {
-    	if (tjrUser.getStatus().intValue() == 0) {
-//       json.put("status", "0");
-       json.put("message", "推荐人未激活");
-     } else if (tjrUser.getLevel() <= 1) {
-//	    	json.put("status", "0");
-	        json.put("message", "推荐人权限不足");
-     } else {
-       
-       //上级关系转接，保证无上限
-    
-       
-       
-	       if (StringUtils.isEmpty(tjrUser.getSuperior())) {
-	         this.user.setSuperior(";" + tuijianren + ";");
-	       }
-	//       else if (tjrUser.getSuperior().split(";").length > 3)
-	//         this.user.setSuperior(";" + tjrUser.getSuperior().split(";", 3)[2] + tuijianren + ";");
-	       else {
-	         this.user.setSuperior(tjrUser.getSuperior() + tuijianren + ";");
-	       } 
-       }
-     }
-     try {
-         String ip = IpUtils.getIpAddress(this.request);
-         this.user.setRegisterIp(ip);
-       } catch (Exception e) {
-         this.user.setRegisterIp("0.0.0.0");
-       }
-       this.user.setPassword(Md5.getMD5Code(this.user.getPassword()));
-       this.user.setLoginCount(Integer.valueOf(0));
-       this.user.setStatus(Integer.valueOf(0));
-       this.user.setBalance(Double.valueOf(0.0D));
-       this.user.setCommission(Double.valueOf(0.0D));
-       this.user.setDeleted(false);
-       this.user.setCreateDate(new Date());
-       this.user.setAddress(address);
-       
-       boolean res = this.userService.saveOrUpdate(this.user);
-       if (res) {
-         User loginUser = this.userService.getUserByName(this.user.getName());
- 
-         loginUser.setLoginCount(Integer.valueOf(loginUser.getLoginCount().intValue() + 1));
-         try
-         {
-           String ip = IpUtils.getIpAddress(this.request);
-           loginUser.setLastLoginIp(ip);
-         } catch (Exception e) {
-           loginUser.setLastLoginIp("0.0.0.0");
+     else {
+    	 if (tjrUser == null){
+    	     int arealevel = 4;
+    	  	   List<User> aList = this.userService.list("from User where deleted = 0 and level = "+ arealevel);
+    	  	   for (User user:aList) {
+    	  		   if (user.getAddress().split("\\|")[2] == area) {
+    	  			   tjrUser = user;
+    	  			   tuijianren = user.getNo();
+    	  		   }
+    	  	   }    	   
          }
-         loginUser.setLastLoginTime(new Date());
-         this.userService.saveOrUpdate(loginUser);
-         HttpSession session = this.request.getSession();
-         session.setAttribute("loginUser", loginUser);
-         json.put("status", "1");
-         json.put("message", "注册成功");
+         if (tjrUser != null) {
+        	if (tjrUser.getStatus().intValue() == 0) {
+//           json.put("status", "0");
+        		json.put("message", "推荐人未激活");
+         } else if (tjrUser.getLevel() <= 1) {
+//    	    	json.put("status", "0");
+    	        json.put("message", "推荐人权限不足");
          } else {
-//         json.put("status", "0");
-         json.put("message", "注册失败，请重试");
-       }
+           
+           //上级关系转接，保证无上限
+        
+    	       if (StringUtils.isEmpty(tjrUser.getSuperior())) {
+    	         this.user.setSuperior(";" + tuijianren + ";");
+    	       }
+    	//       else if (tjrUser.getSuperior().split(";").length > 3)
+    	//         this.user.setSuperior(";" + tjrUser.getSuperior().split(";", 3)[2] + tuijianren + ";");
+    	       else {
+    	         this.user.setSuperior(tjrUser.getSuperior() + tuijianren + ";");
+    	       } 
+           }
+         }
+         try {
+             String ip = IpUtils.getIpAddress(this.request);
+             this.user.setRegisterIp(ip);
+           } catch (Exception e) {
+             this.user.setRegisterIp("0.0.0.0");
+           }
+           this.user.setPassword(Md5.getMD5Code(this.user.getPassword()));
+           this.user.setLoginCount(Integer.valueOf(0));
+           this.user.setStatus(Integer.valueOf(0));
+           this.user.setBalance(Double.valueOf(0.0D));
+           this.user.setCommission(Double.valueOf(0.0D));
+           this.user.setDeleted(false);
+           this.user.setCreateDate(new Date());
+           this.user.setAddress(address);
+           
+           boolean res = this.userService.saveOrUpdate(this.user);
+           if (res) {
+             User loginUser = this.userService.getUserByName(this.user.getName());
+     
+             loginUser.setLoginCount(Integer.valueOf(loginUser.getLoginCount().intValue() + 1));
+             try
+             {
+               String ip = IpUtils.getIpAddress(this.request);
+               loginUser.setLastLoginIp(ip);
+             } catch (Exception e) {
+               loginUser.setLastLoginIp("0.0.0.0");
+             }
+             loginUser.setLastLoginTime(new Date());
+             this.userService.saveOrUpdate(loginUser);
+             HttpSession session = this.request.getSession();
+             session.setAttribute("loginUser", loginUser);
+             json.put("status", "1");
+             json.put("message", "注册成功");
+             } else {
+//             json.put("status", "0");
+             json.put("message", "注册失败，请重试");
+           } 
+     }
      try {
     	 
     	 this.request.setAttribute("status", json.get("status").toString());
@@ -472,19 +473,19 @@ import org.json.JSONException;
  
    //二维码
    public void QRCode(){
-	   String tragetUrl = "http://"+this.request.getServerName()+":"+this.request.getServerPort()+"/fenxiao/user/promoteQRCode.jsp";
-	   HttpSession session = this.request.getSession();
-       User loginUser = (User)session.getAttribute("loginUser");
-       String timestamp = (String)session.getAttribute("timestamp");
-       Long timeNow = System.currentTimeMillis() / 1000; 
-       if (timestamp == null ){
-    	   checkandsign(tragetUrl);
-       } else {
-    	   Long timeLast = Long.parseLong(timestamp);
-    	   if (timeNow - timeLast >= 7150) {
-    		   checkandsign(tragetUrl);
-    	   }
-       }
+	   //String tragetUrl = "http://"+this.request.getServerName()+":"+this.request.getServerPort()+"/fenxiao/user/promoteQRCode.jsp";
+	   //String tragetUrl = "http://aiwac.net/fenxiao/user/promoteQRCode.jsp";
+
+ 	   HttpSession session = this.request.getSession();
+        User loginUser = (User)session.getAttribute("loginUser");
+//       String timestamp = (String)session.getAttribute("timestamp");
+//       Long timeNow = System.currentTimeMillis() / 1000; 
+//	   checkandsign(tragetUrl);
+		/*
+		 * if (timestamp == null ){ checkandsign(tragetUrl); } else { Long timeLast =
+		 * Long.parseLong(timestamp); if (timeNow - timeLast >= 7150) {
+		 * checkandsign(tragetUrl); } }
+		 */
        String bgImgUrl = UserAction.class.getClassLoader().getResource("../../images/code_image.jpg").getPath(); //背景图片地址
        String content = "http://"+this.request.getServerName()+":"+this.request.getServerPort()+"/fenxiao/register.jsp?tuijianren="+loginUser.getNo(); //二维码内容，指向注册地址
        
@@ -497,7 +498,7 @@ import org.json.JSONException;
            VisualQRCode.createQRCode(content,
         	   bgImgUrl, 
                output, 
-               'M', 
+               'L', 
                new Color(70, 130, 180), 
                250, //二维码x轴起点
                950, //二维码y轴起点
@@ -904,8 +905,8 @@ import org.json.JSONException;
        String[] keyStrings = {"grant_type", "appid", "secret"};
 	   Map<String, String> map = new HashMap<String, String>();
 	   map.put("grant_type", "client_credential");
-	   map.put("appid", "");
-	   map.put("secret", "");
+	   map.put("appid", "wxfae0e32db031ae5f");
+	   map.put("secret", "97f7371e38ab500885c6b4ce9d07c3e3");
 	   for(int i = 0;i < map.size();i++) {
        	url += keyStrings[i] +"="+ map.get(keyStrings[i]);
        	if (i != map.size() - 1) 
@@ -914,9 +915,13 @@ import org.json.JSONException;
 	   String token = "";
 	   String ticket = "";
 	   token = this.httpGetConnection.sendGet(url);
-	   url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token="+token.split("\"")[3]+"&type=jsapi";
+	   JSONObject tokenJsonObject = JSONObject.parseObject(token);
+	   
+	   url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token="+tokenJsonObject.getString("access_token")+"&type=jsapi";
 	   ticket = this.httpGetConnection.sendGet(url);
-	   String jsapi_ticket = ticket.split("\"")[9];
+	   JSONObject ticketJsonObject = JSONObject.parseObject(ticket);
+	   
+	   String jsapi_ticket = ticketJsonObject.getString("ticket");
 	   HttpSession session = this.request.getSession();
 	   
        Map<String, String> ret = sign(jsapi_ticket, tragetUrl);
