@@ -41,9 +41,23 @@ border-color: #999999;
     <script type="text/javascript" src="../js/jquery.min.js"></script>
   <script type="text/javascript" src="../js/zepto.min.js"></script>
   <script type="text/javascript">
+  var reward = 0;
+  function rewardCheck()
+	{
+		var mymessage=confirm("是否使用佣金抵扣");
+		if(mymessage==true)
+		{
+			reward=1;
+			pay();
+		}
+		else if(mymessage==false)
+		{			
+			pay();
+		}
+	}
   function pay(){
   		$.ajax({
-	        url: "../ordersPay?no=${orders.no }",
+	        url: "../ordersPay?no=${orders.no }&reward="+reward,
 	        type: "get",
 	        dataType: "json",
 	        async: false,
@@ -121,7 +135,7 @@ border-color: #999999;
        <p><label class="w3">付款时间</label>：${orders.payDate }</p>
        <p><label class="w3">订单状态</label>：
        <c:if test="${orders.status==0 }">未付款
-       <a href="javascript:pay()" id="submitOrderDivId" class="sn-btn sn-btn-assertive sn-btn-big">付款</a>
+       <a href="javascript:rewardCheck()" id="submitOrderDivId" class="sn-btn sn-btn-assertive sn-btn-big">付款</a>
        </c:if>
        <c:if test="${orders.status==1 }">已付款</c:if>
        </p>
