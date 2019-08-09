@@ -489,16 +489,15 @@ import org.springframework.context.annotation.Scope;
        String bgImgUrl = UserAction.class.getClassLoader().getResource("../../images/code_image.jpg").getPath(); //背景图片地址
        String content = "http://"+this.request.getServerName()+":"+this.request.getServerPort()+"/fenxiao/register.jsp?tuijianren="+loginUser.getNo(); //二维码内容，指向注册地址
        
-       
        //测试内容
        //String contentTest = "http://aiwac.net/fenxiao/register.jsp?tuijianren="+loginUser.getPhone();
-       session.setAttribute("link", content);
+       //session.setAttribute("link", content);
        try {
     	   OutputStream output = this.response.getOutputStream();
            VisualQRCode.createQRCode(content,
         	   bgImgUrl, 
                output, 
-               'L', 
+               'H', 
                new Color(70, 130, 180), 
                250, //二维码x轴起点
                950, //二维码y轴起点
@@ -508,8 +507,7 @@ import org.springframework.context.annotation.Scope;
                VisualQRCode.FILL_SHAPE_MODEL_RECTANGLE);        
        } catch (IOException e) {
            e.printStackTrace();
-       }
-       
+       }       
    }
    
    public void logout() throws IOException {
@@ -830,17 +828,18 @@ import org.springframework.context.annotation.Scope;
 //		                 secondLevelNum++;
 //		               else if ((j == 3) && (StringUtils.equals(loginUser.getNo(), leverNoArr[i])))
 //		                 thirdLevelNum++;
-            		   
-		               BounsRule identity = this.bounsRuleService.bounsRuleByLevel(user.getLevel());
-		               user1.put("name", user.getName());
-		               user1.put("phone", user.getPhone());
-		               if (identity != null) {
-		            	   user1.put("level", identity.getIdentityName());
-		               } else {
-		            	   user1.put("level", "非会员");
-		               }
-		               userList.add(user1);
-		               allLevelNum += 1; 
+            		   if (checkIdentity(user, loginUser)) {
+			               BounsRule identity = this.bounsRuleService.bounsRuleByLevel(user.getLevel());
+			               user1.put("name", user.getName());
+			               user1.put("phone", user.getPhone());
+			               if (identity != null) {
+			            	   user1.put("level", identity.getIdentityName());
+			               } else {
+			            	   user1.put("level", "非会员");
+			               }
+			               userList.add(user1);
+			               allLevelNum += 1; 
+            		   }
             	 }           	
              }
            }
@@ -899,14 +898,32 @@ import org.springframework.context.annotation.Scope;
      System.out.println(StringUtils.isEmpty(b));
    }
    
+   //下级检验：如果被检测用户在到登录用户之间的关系链中，有不小于登录用户的上级，则不为登录用户的下级
+   public boolean checkIdentity(User user, User loginUser) { 
+	   String superListStr = user.getSuperior();
+       String[] superList = superListStr.split(";");
+       for(int i=superList.length-1;i>0;i--) {		  			   	 
+		   if (superList[i].equals(loginUser.getNo())) {
+			   break;
+		   }
+		   User findUser = this.userService.getUserByNo(superList[i]);
+		   if (findUser != null && !findUser.isDeleted()) {
+			   if (findUser.getLevel() >= loginUser.getLevel()) { 
+				   return false; 
+			   }  
+		   }
+	   }
+	   return true;
+   } 
+   
    //生成微信验证签名部分
    public Map checkandsign(String tragetUrl) {
 	   String url = "https://api.weixin.qq.com/cgi-bin/token?";
        String[] keyStrings = {"grant_type", "appid", "secret"};
 	   Map<String, String> map = new HashMap<String, String>();
 	   map.put("grant_type", "client_credential");
-	   map.put("appid", "wxfae0e32db031ae5f");
-	   map.put("secret", "97f7371e38ab500885c6b4ce9d07c3e3");
+	   map.put("appid", "");
+	   map.put("secret", "");
 	   for(int i = 0;i < map.size();i++) {
        	url += keyStrings[i] +"="+ map.get(keyStrings[i]);
        	if (i != map.size() - 1) 
