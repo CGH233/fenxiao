@@ -72,9 +72,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</c:if>
 	<c:if test="${sessionScope.loginUser.status==1 }">
 		<div >
-		<a href="http://101.132.192.66:8083/fenxiao/register.jsp">
 			<img src=userQRCode></img>
-		</a>
 		</div>
 	</c:if>
 	</section>
