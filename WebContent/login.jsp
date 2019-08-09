@@ -37,7 +37,7 @@ alert("<%=successInfo%>");                                            // 弹出�
 		<div class="input-a sn-block wbox mt30 pr">
 			<span>手机号</span>
 			<div class="wbox-flex ml30 pr">
-				<input type="text" id="name" name="user.phone" value="" placeholder="请输入手机号" maxlength="32">	
+				<input type="text" id="name" name="user.name" value="" placeholder="请输入手机号" maxlength="32">	
 			</div>
 			<em class="delete" style="display:none" name="Wap_reg_person_001"></em>
 		</div>
