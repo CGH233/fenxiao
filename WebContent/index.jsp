@@ -34,7 +34,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		var page = 1;
 	</script>
 </head>
-<body>
+<body >
 <!-- loading -->
 	<c:if test="${not empty sessionScope.loginUser}"> <%session.setAttribute("type", 1); %></c:if>
 	<div class="sn-nav sn-block sn-nav-search">
@@ -64,12 +64,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<ul class="fix">
 					<li><a name="index_none_floor3_330052" href="user/index.jsp">
 					<img alt="" data-src="done" src="images/143262193526726791.jpg"><div class="title">会员中心</div></a></li>
-					<% if (session.getAttribute("type") == "1") {%>									
+					<% if ("1".equals(""+session.getAttribute("type"))   ) {%>									
 					<li><a name="index_none_floor3_330051"  href="register.jsp?tuijianren=${sessionScope.loginUser.no}">
 					<img alt="" data-src="done" src="images/143262190460206422.jpg"><div class="title">推广链接</div>
 					</a></li>
 					<%}else{%>
-					<li><a name="index_none_floor3_330051" href="user/login.jsp">
+					<li><a name="index_none_floor3_330051" href="login.jsp">
 					<img alt="" data-src="done" src="images/143262190460206422.jpg"><div class="title">推广链接</div>
 					</a></li>
 					<% }%>

@@ -513,6 +513,7 @@ import org.springframework.context.annotation.Scope;
    public void logout() throws IOException {
      HttpSession session = this.request.getSession();
      session.setAttribute("loginUser", null);
+     session.setAttribute("type", 0);
      this.response.sendRedirect("../login.jsp");
    }
  
