@@ -75,7 +75,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</a>
 				</li>
 				<li>
-					<a href="../register.jsp" class="block wbox" >
+					<a href="../register.jsp?tuijianren=${loginUser.no}" class="block wbox" >
 						<label class="meb-list-ico" style="background:url('../images/ico-myTicket.png') no-repeat left center;background-size:1rem 1rem;">推广链接</label>
 						<div class="wbox-flex tr sn-txt-muted arrow">
 								<span id="toExpiredCouponsNum"></span>
