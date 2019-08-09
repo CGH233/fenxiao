@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -50,14 +51,31 @@ alert("<%=errorInfo%>");                                            // 弹出错
 <%
 }
 %>
-    <div class="sn-nav">
-		<div class="sn-nav-back">
-		<a class="sn-iconbtn" href="index.jsp">返回</a></div>
-		<div class="sn-nav-title of">注册</div>
-	</div>
-	<section class="sn-main pr">
-		<form action="register()" class="pageForm" data-toggle="validate" data-reload-navtab="true">
-		<input type="hidden" id="no" name="user.no" value="" placeholder="请刷新生成编号" maxlength="6" readonly="readonly">	
+		<c:choose>
+    	<c:when test = "${session.type == 1}">
+		<section class="sn-main pr">
+		<c:if test="${sessionScope.loginUser.status == 0}">
+			<div class="input-a sn-block wbox mt30 pr">
+				<span><a href="list.jsp">您的账号未激活，请先购买商品激活账号</a></span>
+			</div>
+		</c:if>
+		<c:if test="${sessionScope.loginUser.status==1 }">
+			<div>
+				<img src=user/userQRCode></img>
+			</a>
+			</div>
+		</c:if>
+		</section>
+		</c:when>
+		<c:otherwise>
+		<div class="sn-nav">
+			<div class="sn-nav-back">
+			<a class="sn-iconbtn" href="index.jsp">返回</a></div>
+			<div class="sn-nav-title of">注册</div>
+		</div>
+		<section class="sn-main pr">
+			<form action="register()" class="pageForm" data-toggle="validate" data-reload-navtab="true">
+			<input type="hidden" id="no" name="user.no" value="" placeholder="请刷新生成编号" maxlength="6" readonly="readonly">			
 		<% if (errorInfo != null) {%>
 		<input type="hidden" id="tuijianren" name="tuijianren" value="${tuijianren}" placeholder="请输入推荐人电话号码" maxlength="32">		
 		<div class="input-a sn-block wbox mt30 pr">
@@ -131,7 +149,9 @@ alert("<%=errorInfo%>");                                            // 弹出错
 		<button type="submit" class="first-step sn-btn sn-btn-big sn-btn-block m60 sn-btn-positive">注册</button>
 		</form>
 		<p class="assisFun f14 m30"><a href="login.jsp" name="WAP_login_none_register">登录</a>
-		<a href="findPassword.jsp">忘记密码?</a></p>		
+		<a href="findPassword.jsp">忘记密码?</a></p>				
 	</section>
+	</c:otherwise>
+	</c:choose>
 	<script type="text/javascript" src="js/zepto.min.js"></script>
 </body></html>
