@@ -281,7 +281,7 @@ public class OrdersAction extends BaseAction
     	//登录用户和订单用户不一致
         json.put("status", "0");
         json.put("message", "没有权限");
-      } else if (findUser.getBalance().doubleValue() + existCommission < findOrders.getMoney().doubleValue()) {
+      } else if ((findUser.getBalance().doubleValue() + existCommission < findOrders.getMoney().doubleValue() && reward == 1) || (findUser.getBalance() < findOrders.getMoney() && reward == 0)) {
         json.put("status", "0");
         json.put("message", "余额不足，请先充值");
       } else if (findOrders.getStatus().intValue() == 1) {
@@ -347,7 +347,8 @@ public class OrdersAction extends BaseAction
                   //设置三个boolean, 记录2级之后的管理奖是否被分完了，为true代表还没分，为false代表已经被分出去了。
                   boolean areaReward=true;
                   boolean MainReward=true;
-                  boolean shareholderReward=true;
+                  boolean shareholderReward=true; //level00000
+                  boolean stockholderReward=true; //level200000
                   
                   //第一个是空值,所以不遍历第一个,从尾部开始遍历
                   for(int i=superList.length-1;i>0;i--) {
@@ -363,6 +364,10 @@ public class OrdersAction extends BaseAction
                 	  //直接推荐人
                 	  if(i==superList.length-1) {
                 		  //计算佣金
+                		  //如果是普通vip，跳过复购直推奖金
+                		  if (diUser.getLevel() == level398) {
+                			  continue;
+                		  }
                 		  String rewardString=bounsRule.getDirectRetailRe();
                 		  if(rewardString.contains("%")) {
                 			  commissionNum= findOrders.getMoney() * 
@@ -407,7 +412,7 @@ public class OrdersAction extends BaseAction
                           remainMoney = remainMoney - commissionNum;
                 	  }//二级之后的管理奖
                 	  else {
-                		  //二级之后,只有:社区合伙人  区域合伙人 总代合伙人可以享有, 一共三笔,分完即止
+                		  //二级之后,只有:社区合伙人  区域合伙人 总代合伙人 联创股东可以享有, 一共四笔,分完即止
                 		  //如果推荐人是总代股东
                 		  if(diUser.getLevel()==5) {
                 			  if(shareholderReward) {
@@ -484,8 +489,33 @@ public class OrdersAction extends BaseAction
                                   
                 				  areaReward = false;
                 			  }
+                		  } else if(diUser.getLevel()==6) {
+                			  if(stockholderReward) {
+                				  //计算佣金
+                        		  String rewardString=bounsRule.getTwoMaRetailRe();
+                        		  if(rewardString.contains("%")) {
+                        			  commissionNum= findOrders.getMoney() * 
+                        					  Double.parseDouble(rewardString.substring(0,rewardString.length()-1)) * 
+                        					  0.01d;
+                        		  }else {
+                            		  commissionNum = Double.parseDouble(rewardString);
+                        		  }
+                        		  
+                        		  diUser.setCommission(Double.valueOf(diUser.getCommission().doubleValue() + commissionNum));//更新佣金总额
+                                  this.userService.saveOrUpdate(diUser);
+                                  //更新订单中的描述
+                                  summary=summary+diUser.getPhone()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
+                                		  "2级之后股东管理复购奖励："+commissionNum+"<br/>";
+                                  
+                                  
+                                  commission.setRemark("来自用户（编号："+loginUser.getName()+",用户名："+loginUser.getName()+
+                                		  				"）购买产品 ["+findOrders.getProductName()+"] 的2级之后股东管理复购奖励");
+                                  remainMoney = remainMoney - commissionNum;
+                                  
+                				  shareholderReward=false;
+                			  }
                 		  }
-                		  if(shareholderReward==false && MainReward == false && areaReward == false) {
+                		  if(shareholderReward==false && MainReward == false && areaReward == false && stockholderReward == false) {
                 			  //停止for循环
                         	  commission.setType(Integer.valueOf(1));
                               commission.setMoney(Double.valueOf(commissionNum));
@@ -532,6 +562,7 @@ public class OrdersAction extends BaseAction
                   boolean areaReward=true;
                   boolean MainReward=true;
                   boolean shareholderReward=true;
+                  boolean stockholderReward=true;
                   
                   //第一个是空值,所以不遍历第一个,从尾部开始遍历
                   for(int i=superList.length-1;i>0;i--) {
@@ -592,7 +623,7 @@ public class OrdersAction extends BaseAction
                           
                 	  }//二级之后的管理奖
                 	  else {
-                		  //二级之后,只有:社区合伙人  区域合伙人 总代合伙人可以享有, 一共三笔,分完即止
+                		  //二级之后,只有:社区合伙人  区域合伙人 总代合伙人 联创股东可以享有, 一共四笔,分完即止
                 		  //如果推荐人是总代股东
                 		  if(diUser.getLevel()==5) {
                 			  if(shareholderReward) {
@@ -669,8 +700,33 @@ public class OrdersAction extends BaseAction
                                   
                 				  areaReward = false;
                 			  }
+                		  } else if(diUser.getLevel()==6) {
+                			  if(stockholderReward) {
+                				  //计算佣金
+                        		  String rewardString=bounsRule.getTwoMaRetailRe();
+                        		  if(rewardString.contains("%")) {
+                        			  commissionNum= findOrders.getMoney() * 
+                        					  Double.parseDouble(rewardString.substring(0,rewardString.length()-1)) * 
+                        					  0.01d;
+                        		  }else {
+                            		  commissionNum = Double.parseDouble(rewardString);
+                        		  }
+                        		  
+                        		  diUser.setCommission(Double.valueOf(diUser.getCommission().doubleValue() + commissionNum));//更新佣金总额
+                                  this.userService.saveOrUpdate(diUser);
+                                  //更新订单中的描述
+                                  summary=summary+diUser.getPhone()+" "+diUser.getName()+" "+bounsRule.getIdentityName()+" "+
+                                		  "2级之后股东管理复购奖励："+commissionNum+"<br/>";
+                                  
+                                  
+                                  commission.setRemark("来自用户（编号："+loginUser.getName()+",用户名："+loginUser.getName()+
+                                		  				"）购买产品 ["+findOrders.getProductName()+"] 的2级之后股东管理复购奖励");
+                                  remainMoney = remainMoney - commissionNum;
+                                  
+                				  shareholderReward=false;
+                			  }
                 		  }
-                		  if(shareholderReward==false && MainReward == false && areaReward == false) {
+                		  if(shareholderReward==false && MainReward == false && areaReward == false && stockholderReward == false) {
                 			  //停止for循环
                         	  commission.setType(Integer.valueOf(1));
                               commission.setMoney(Double.valueOf(commissionNum));
@@ -755,11 +811,7 @@ public class OrdersAction extends BaseAction
               superListStr = findUser.getSuperior();
              
               String[] superList = superListStr.split(";");
-              
-              //设置三个boolean, 记录2级之后的管理奖是否被分完了，为true代表还没分，为false代表已经被分出去了。
-              boolean areaReward=true;
-              boolean MainReward=true;
-              boolean shareholderReward=true;
+
               remainMoney  = findOrders.getMoney();
               
               //第一个是空值,所以不遍历第一个,从尾部开始遍历
