@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -35,7 +36,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 <body>
 <!-- loading -->
-
+	<c:if test="${not empty sessionScope.loginUser}"> <%session.setAttribute("type", 1); %></c:if>
 	<div class="sn-nav sn-block sn-nav-search">
 		<div class="sn-nav index-nav wbox sticky" id="searchFixed" style="position: static;">
 				<img src="${config.logo }" class="logo">
@@ -63,9 +64,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<ul class="fix">
 					<li><a name="index_none_floor3_330052" href="user/index.jsp">
 					<img alt="" data-src="done" src="images/143262193526726791.jpg"><div class="title">会员中心</div></a></li>
-					<li><a name="index_none_floor3_330051" href="user/promoteQRCode.jsp">
+					<% if (session.getAttribute("type") == "1") {%>									
+					<li><a name="index_none_floor3_330051"  href="register.jsp?tuijianren=${sessionScope.loginUser.no}">
 					<img alt="" data-src="done" src="images/143262190460206422.jpg"><div class="title">推广链接</div>
 					</a></li>
+					<%}else{%>
+					<li><a name="index_none_floor3_330051" href="user/login.jsp">
+					<img alt="" data-src="done" src="images/143262190460206422.jpg"><div class="title">推广链接</div>
+					</a></li>
+					<% }%>
 					<li><a name="index_none_floor3_330053" href="user/ordersList.jsp"><img alt="" data-src="done" src="images/143262692801385199.jpg"><div class="title">我的订单</div></a></li>
 					<li><a name="index_none_floor3_330054" href="user/financialList.jsp">
 					<img alt="" data-src="done" src="images/143385213411317884.jpg">

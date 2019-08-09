@@ -345,6 +345,8 @@ public class OrdersAction extends BaseAction
                   String[] superList = superListStr.split(";");
                   
                   //设置三个boolean, 记录2级之后的管理奖是否被分完了，为true代表还没分，为false代表已经被分出去了。
+                  boolean firstReward = true;
+                  boolean secondReward = true;
                   boolean areaReward=true;
                   boolean MainReward=true;
                   boolean shareholderReward=true; //level00000
@@ -362,9 +364,9 @@ public class OrdersAction extends BaseAction
             		  double commissionNum =0.0d;
             		  
                 	  //直接推荐人
-                	  if(i==superList.length-1) {
+                	  if(firstReward) {
                 		  //计算佣金
-                		  //如果是普通vip，跳过复购直推奖金
+                		  //如果是普通vip，直推顺延为其上级获得
                 		  if (diUser.getLevel() == level398) {
                 			  continue;
                 		  }
@@ -387,9 +389,10 @@ public class OrdersAction extends BaseAction
                           commission.setRemark("来自用户（手机号："+loginUser.getPhone()+",用户名："+loginUser.getName()+
                         		  				"）购买产品 ["+findOrders.getProductName()+"] 的直接推荐复购奖励");
                           remainMoney = remainMoney - commissionNum;
+                          firstReward = false;
                 		  
                 	  }//间接推荐人
-                	  else if(i==superList.length-2){
+                	  else if(secondReward){
                 		  //计算佣金
                 		  String rewardString=bounsRule.getIndirectRetailRe();
                 		  if(rewardString.contains("%")) {
@@ -410,6 +413,7 @@ public class OrdersAction extends BaseAction
                           commission.setRemark("来自用户（手机号："+loginUser.getPhone()+",用户名："+loginUser.getName()+
                         		  				"）购买产品 ["+findOrders.getProductName()+"] 的间接推荐复购奖励");
                           remainMoney = remainMoney - commissionNum;
+                          secondReward = false;
                 	  }//二级之后的管理奖
                 	  else {
                 		  //二级之后,只有:社区合伙人  区域合伙人 总代合伙人 联创股东可以享有, 一共四笔,分完即止

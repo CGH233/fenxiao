@@ -20,6 +20,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript" async="" src="../js/da_opt.js"></script>
 	<script type="text/javascript" src="../js/jquery.min.js"></script>
 	<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+	<script src="qrcode.js"></script>
 	<script type="text/javascript">
 		/* wx.config({
                     debug : false,
@@ -62,8 +63,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  			  alert(res.errMsg);
  		}); */
 	</script>
+	
+	<script type="text/javascript">
+		var qrcode = new QRCode(document.getElementById("qrcode"), {
+			text: "${sessionScope.link}",
+			width: 128,
+			height: 128,
+			colorDark : "#000000",
+			colorLight : "#ffffff",
+			correctLevel : QRCode.CorrectLevel.H
+		});
+	</script>
 </head>
 <body>
+	<div id="qrcode"></div>
 	<section class="sn-main pr">
 	<c:if test="${sessionScope.loginUser.status==0 }">
 		<div class="input-a sn-block wbox mt30 pr">
