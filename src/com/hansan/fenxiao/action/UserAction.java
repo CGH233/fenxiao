@@ -412,7 +412,7 @@ import org.springframework.context.annotation.Scope;
      String prePage = (String) session.getAttribute("prePage");
      //session.removeAttribute("prePage");
      JSONObject json = new JSONObject();
-     User user1 = this.userService.getUserByPhone(this.user.getName());
+     User user1 = this.userService.getUserByPhone(this.user.getPhone());
      if (this.user == null || user1 == null) {
        json.put("status", "0");
        json.put("message", "手机号错误");
@@ -439,6 +439,7 @@ import org.springframework.context.annotation.Scope;
          if(prePage!=null){
         	 json.put("prePage",prePage);
          }
+         System.out.println("prepage:"+prePage);
        }
      }
      out.print(json.toString());
