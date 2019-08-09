@@ -438,6 +438,7 @@ import org.springframework.context.annotation.Scope;
          if(prePage!=null){
         	 json.put("prePage",prePage);
          }
+         System.out.println("prepage:"+prePage);
        }
      }
      out.print(json.toString());
