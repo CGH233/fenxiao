@@ -401,7 +401,7 @@ import org.springframework.context.annotation.Scope;
  
    public void login()
    {
-     PrintWriter out = null;
+     PrintWriter  out = null;
      try {
        out = this.response.getWriter();
      } catch (IOException e) {
