@@ -22,6 +22,8 @@ import com.hansan.fenxiao.utils.BjuiJson;
 import com.hansan.fenxiao.utils.BjuiPage;
 import com.hansan.fenxiao.utils.FreemarkerUtils;
 import com.hansan.fenxiao.utils.PageModel;
+import com.sun.glass.ui.Window.Level;
+
 import freemarker.template.Configuration;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -74,9 +76,9 @@ public class OrdersAction extends BaseAction
   private int level398 = 1;
   private int level990 = 2;
   private int level3980 = 3;
-  private int level10000 = 4;
-  private int level100000 = 5;
-  private int level200000 = 6;
+  private int level10000 = 4; //区级
+  private int level100000 = 5; //市级
+  private int level200000 = 6; //省级
 
   @Resource(name="configService")
   private IConfigService<Config> configService;
@@ -136,6 +138,9 @@ public class OrdersAction extends BaseAction
         if ((loginUser == null) || (loginUser.getId() == null)) {
            this.request.setAttribute("status", "0");
            this.request.setAttribute("message", "您未登陆或者登陆失效，请重新登陆");
+       } else if(checkIdentity(loginUser, findProduct.getLevel())){    	 
+    	  this.request.setAttribute("status", "0");
+          this.request.setAttribute("message", "您所在地区已有此级别代理（股东），无法购买");              
        } else {
     	   User user = this.userService.getUserByPhone(loginUser.getPhone());
 //    	   if (user.getLevel() < findProduct.getLevel() && findProduct.getLevel() > level398) {
@@ -267,27 +272,31 @@ public class OrdersAction extends BaseAction
     Product product = new Product();
     int productLevel = 0;    
     JSONObject json = new JSONObject();
-    Double useReward = 0.00d;
+    Double useReward = 0.00d;   
     if ((loginUser == null) || (loginUser.getId() == null)) {
       json.put("status", "0");
       json.put("message", "您未登陆或者登陆失效，请重新登陆");
       json.put("href", "../login.jsp");
-    } else {
-      User findUser = (User)this.userService.findById(User.class, loginUser.getId().intValue());
-      if (findOrders == null) {
+    } else if (findOrders == null) {
         json.put("status", "0");
         json.put("message", "订单不存在");
-      }
-      else if (findOrders.getUser().getId() != findUser.getId()) {
+     }else{
+      User findUser = (User)this.userService.findById(User.class, loginUser.getId().intValue());
+      product = this.productService.findById(Product.class, Integer.parseInt(findOrders.getProductId()));
+      productLevel = product.getLevel();
+      if (findOrders.getUser().getId() != findUser.getId()) {
     	//登录用户和订单用户不一致
         json.put("status", "0");
-        json.put("message", "没有权限");
+        json.put("message", "登录用户非本订单用户，没有权限支付");
       } else if ((findUser.getBalance().doubleValue() + existCommission < findOrders.getMoney().doubleValue() && reward == 1) || (findUser.getBalance() < findOrders.getMoney() && reward == 0)) {
         json.put("status", "0");
         json.put("message", "余额不足，请先充值");
       } else if (findOrders.getStatus().intValue() == 1) {
         json.put("status", "0");
         json.put("message", "该订单已付款，请不要重复提交支付");
+      }else if (checkIdentity(findUser, productLevel)) {
+          json.put("status", "0");
+          json.put("message", "您所在地区已有此级别代理（股东），无法购买");
       } else {
         List<Kami> kamiList = this.kamiService.list("from Kami where deleted=0 and status=0 and product.id=" + findOrders.getProductId(), 0, findOrders.getProductNum().intValue(), new Object[0]);
         if (kamiList.size() < findOrders.getProductNum().intValue()) {
@@ -296,7 +305,7 @@ public class OrdersAction extends BaseAction
           json.put("message", "库存不足，请联系管理员");
         } else {
         	//更新用户资金，含佣金抵扣
-        	if (reward == 1) {           	
+        	if (reward == 1 && existCommission > 0) {           	
             	if (existCommission <= findOrders.getMoney()) {
             		findUser.setBalance(Double.valueOf(findUser.getBalance().doubleValue() - findOrders.getMoney().doubleValue())+existCommission);//更新金额总数
             		findUser.setCommission(0.00);
@@ -317,14 +326,13 @@ public class OrdersAction extends BaseAction
             findUser.setStatus(Integer.valueOf(1));
             findUser.setStatusDate(new Date());//
           }
-          //买的产品是零售产品
-          product = this.productService.findById(Product.class, Integer.parseInt(findOrders.getProductId()));
-          productLevel = product.getLevel();
+          
+          
           String superListStr = findUser.getSuperior();
           double remainMoney  = findOrders.getMoney();
           Date date = new Date();
           
-         
+          //买的产品是零售产品
           if(level398 == productLevel) {
         	  if (superListStr != null) {
         	  //从订单中更新卡密信息
@@ -1139,8 +1147,8 @@ public class OrdersAction extends BaseAction
           
           json.put("status", "1");
           json.put("message", "付款成功");
-          if (reward == 1) {
-        	  json.put("message", "付款成功，使用佣金抵扣 ￥"+useReward+"元");
+          if (reward == 1 && existCommission > 0) {
+        		  json.put("message", "付款成功，使用佣金抵扣 ￥"+useReward+"元");
           }
           json.put("no", findOrders.getNo());
           
@@ -1394,5 +1402,40 @@ public class OrdersAction extends BaseAction
 
   public void setFtlFileName(String ftlFileName) {
     this.ftlFileName = ftlFileName;
+  }
+  
+  //判断是否已经有了某一级别的代理，能否购买，true为已存在，false为可以购买
+  public boolean checkIdentity(User user, int level) {
+	  String address = user.getAddress();
+	  switch (level) {
+	  	case 4 :
+		  String area = address.split("\\|")[2];
+          List<User> aList = this.userService.list("from User where deleted = 0 and level = "+level10000);
+		  for (User aUser:aList) {
+			  if (aUser.getAddress().split("\\|")[2].equals(area)) {
+				  return true;
+			  }
+		  } 
+		  break;
+	  	case 5 :
+	  		String city = address.split("\\|")[1];
+	  		List<User> cList = this.userService.list("from User where deleted = 0 and level = "+level100000);
+	  		for (User cUser:cList) {
+				  if (cUser.getAddress().split("\\|")[2].equals(city)) {
+					  return true;
+				  }
+			  } 
+	  		break;
+	  	case 6 :
+	  		String province = address.split("\\|")[2];
+	  		List<User> pList = this.userService.list("from User where deleted = 0 and level = "+level200000);
+	  		for (User cUser:pList) {
+				  if (cUser.getAddress().split("\\|")[2].equals(province)) {
+					  return true;
+				  }
+			}
+	  		break;
+	  	}	  
+	  return false;
   }
 }
