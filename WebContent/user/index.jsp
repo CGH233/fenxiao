@@ -58,7 +58,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<p class="list-title sn-txt-muted">我的信息</p>
 				<li style="align:center;">
 						货币:<span id="balance">${loginUser.balance }元</span>&nbsp;
-						奖金:<span id="commission">${loginUser.commission }元</span>
+						佣金:<span id="commission">${loginUser.commission }元</span>
 				</li>
 				<li>
 					<a href="../list.jsp" class="block wbox" >

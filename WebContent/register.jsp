@@ -14,7 +14,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta content="telephone=no" name="format-detection">
 		<link rel="stylesheet" type="text/css" href="css/style.css" media="all">
-	<title>会员注册</title>
+		
+		<c:choose>
+    	<c:when test = "${session.type == 1}">
+			<title>推广二维码</title>
+		</c:when>
+		<c:otherwise>
+			<title>会员注册</title>
+		</c:otherwise>
+		</c:choose>
 	<script type="text/javascript" async="" src="js/aywmq.js"></script>
 	<script async="" src="js/analytics.js"></script>
 	<script type="text/javascript" async="" src="js/da_opt.js"></script>
@@ -38,6 +46,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     }  
     return vars;  
 }  
+	
 	</script>
 </head>
 <body>
@@ -52,7 +61,7 @@ alert("<%=errorInfo%>");                                            // 弹出错
 }
 %>
 		<c:choose>
-    	<c:when test = "${session.type == 1}">
+    	<c:when test = "${session.type == 1}" >
 		<section class="sn-main pr">
 		<c:if test="${sessionScope.loginUser.status == 0}">
 			<div class="input-a sn-block wbox mt30 pr">
