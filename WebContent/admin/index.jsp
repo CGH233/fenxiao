@@ -201,6 +201,10 @@ $(function(){
                                 <li data-id="15" data-pid="1" data-url="rechargeList" data-tabid="rechargeList">充值管理</li>
                                 <li data-id="15" data-pid="1" data-url="rechargeCardList" data-tabid="rechargeCardList">充值卡管理</li>
                                 <li data-id="15" data-pid="1" data-url="bounsRuleList" data-tabid="bounsRuleList">奖励系统管理</li>
+                                <li data-id="15" data-pid="1" data-url="groupRuleList" data-tabid="groupRuleList">分红系统管理</li>                              
+                                <li data-id="15" data-pid="1" data-url="groupcommissionList" data-tabid="groupcommissionList">团队奖月结管理</li>
+                                <li data-id="15" data-pid="1" data-url="stockholderCommissionList" data-tabid="stockholderCommissionList">股东分红月结管理</li>
+                                
                             </ul>
                         </div>
                     </div>

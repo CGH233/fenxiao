@@ -53,7 +53,8 @@ public class BaseDaoImpl<T>
 
   public List<T> list(String hql)
   {
-    return getSession().createQuery(hql).list();
+    List list =  createQuery(hql).list();
+    return list;
   }
   /*
    * 查询(non-Javadoc)

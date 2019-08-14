@@ -6,6 +6,7 @@ import com.hansan.fenxiao.entities.BounsRule;
 import com.hansan.fenxiao.entities.Commission;
 import com.hansan.fenxiao.entities.Config;
 import com.hansan.fenxiao.entities.Financial;
+import com.hansan.fenxiao.entities.GroupRule;
 import com.hansan.fenxiao.entities.Kami;
 import com.hansan.fenxiao.entities.Orders;
 import com.hansan.fenxiao.entities.Product;
@@ -14,6 +15,7 @@ import com.hansan.fenxiao.service.IBounsRuleService;
 import com.hansan.fenxiao.service.ICommissionService;
 import com.hansan.fenxiao.service.IConfigService;
 import com.hansan.fenxiao.service.IFinancialService;
+import com.hansan.fenxiao.service.IGroupRuleService;
 import com.hansan.fenxiao.service.IKamiService;
 import com.hansan.fenxiao.service.IOrdersService;
 import com.hansan.fenxiao.service.IProductService;
@@ -70,6 +72,9 @@ public class OrdersAction extends BaseAction
   
   @Resource(name="bounsRuleService")
   private IBounsRuleService<BounsRule> bounsRuleService;
+  
+  @Resource(name="groupRuleService")
+  private IGroupRuleService<GroupRule> groupRuleService;
   
   private Orders orders;
   private String ftlFileName;
@@ -448,7 +453,7 @@ public class OrdersAction extends BaseAction
                                 		  "2级之后总代管理复购奖励："+commissionNum+"<br/>";
                                   
                                   
-                                  commission.setRemark("来自用户（编号："+loginUser.getName()+",用户名："+loginUser.getName()+
+                                  commission.setRemark("来自用户（手机号："+loginUser.getPhone()+",用户名："+loginUser.getName()+
                                 		  				"）购买产品 ["+findOrders.getProductName()+"] 的2级之后总代管理复购奖励");
                                   remainMoney = remainMoney - commissionNum;
                                   
@@ -523,7 +528,7 @@ public class OrdersAction extends BaseAction
                                 		  "2级之后股东管理复购奖励："+commissionNum+"<br/>";
                                   
                                   
-                                  commission.setRemark("来自用户（编号："+loginUser.getName()+",用户名："+loginUser.getName()+
+                                  commission.setRemark("来自用户（手机号："+loginUser.getPhone()+",用户名："+loginUser.getName()+
                                 		  				"）购买产品 ["+findOrders.getProductName()+"] 的2级之后股东管理复购奖励");
                                   remainMoney = remainMoney - commissionNum;
                                   
@@ -1407,30 +1412,30 @@ public class OrdersAction extends BaseAction
   //判断是否已经有了某一级别的代理，能否购买，true为已存在，false为可以购买
   public boolean checkIdentity(User user, int level) {
 	  String address = user.getAddress();
+	  String area = address.split("\\|")[2];
+	  String city = address.split("\\|")[1];
+	  String province = address.split("\\|")[0];
 	  switch (level) {
-	  	case 4 :
-		  String area = address.split("\\|")[2];
+	  	case 4 :		  
           List<User> aList = this.userService.list("from User where deleted = 0 and level = "+level10000);
 		  for (User aUser:aList) {
-			  if (aUser.getAddress().split("\\|")[2].equals(area)) {
+			  if (aUser.getAddress().split("\\|")[2].equals(area) && aUser.getAddress().split("\\|")[1].equals(city) && aUser.getAddress().split("\\|")[0].equals(province)) {
 				  return true;
 			  }
 		  } 
 		  break;
-	  	case 5 :
-	  		String city = address.split("\\|")[1];
-	  		List<User> cList = this.userService.list("from User where deleted = 0 and level = "+level100000);
-	  		for (User cUser:cList) {
-				  if (cUser.getAddress().split("\\|")[2].equals(city)) {
+	  	case 5 :	  		
+	  		List<User> cList = this.userService.list("from User where deleted = 0 and level = "+level100000);	  		
+	  		for (User cUser:cList) {	  			 
+				  if (cUser.getAddress().split("\\|")[1].equals(city) && cUser.getAddress().split("\\|")[0].equals(province)) {
 					  return true;
 				  }
 			  } 
 	  		break;
 	  	case 6 :
-	  		String province = address.split("\\|")[2];
 	  		List<User> pList = this.userService.list("from User where deleted = 0 and level = "+level200000);
-	  		for (User cUser:pList) {
-				  if (cUser.getAddress().split("\\|")[2].equals(province)) {
+	  		for (User pUser:pList) {
+				  if (pUser.getAddress().split("\\|")[0].equals(province)) {
 					  return true;
 				  }
 			}
