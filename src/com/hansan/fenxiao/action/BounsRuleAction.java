@@ -63,7 +63,6 @@ public class BounsRuleAction extends BaseAction{
 	     this.cfg.setServletContextForTemplateLoading(
 	       this.request.getServletContext(), "WEB-INF/templates/admin");
 	     List<BounsRule> bounsRuleList = this.bounsRuleService.getBounsRuleList();
-	     System.out.println(bounsRuleList.get(0).toString());
 	     Map root = new HashMap();
 	     root.put("bounsRuleList", bounsRuleList);
 	     root.put("page", this.page);

@@ -18,6 +18,25 @@
     	<action name="bounsRuleUpdate" class="bounsRuleAction" method="editBounsRule">
     	</action>
     	
+    	<action name="groupRuleList" class="groupRuleAction" method="groupRuleList">
+    		<param name="ftlFileName">groupRuleList.ftl</param>
+    	</action>
+    	<action name="groupRuleEdit" class="groupRuleAction" method="groupRuleById">
+    		<param name="ftlFileName">groupRuleEdit.ftl</param>
+    	</action>
+    	<action name="groupcommissionList" class="groupRuleAction" method="groupcommissionList">
+    		<param name="ftlFileName">groupcommissionList.ftl</param>
+    	</action>
+    	<action name="groupRuleUpdate" class="groupRuleAction" method="editGroupRule">
+    	</action>
+    	<action name="groupPay" class="groupRuleAction" method="groupPay">
+    	</action>
+    	<action name="stockholderCommissionList" class="groupRuleAction" method="stockholderCommissionList">
+    		<param name="ftlFileName">stockHolderCommissionList.ftl</param>
+    	</action>
+    	<action name="stockholderPay" class="groupRuleAction" method="stockholderPay">
+    	</action>
+    	
     	
     	<action name="userAdd" class="userAction" method="add">
     	</action>
