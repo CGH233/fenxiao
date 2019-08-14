@@ -113,14 +113,15 @@ public class GroupRuleAction extends BaseAction{
 	    				 callbackData = BjuiJson.json("403", "修改值超出上一个范围的上限", "", 
 		             "", "", "", "", "");
 	    			 }
-	    			 if (GroupRule.getUpper_limit() != null) {
+	    		 }
+	    		 if (GroupRule.getUpper_limit() != null) {
 	    				 GroupRule checkGroupRulebehind = this.groupRuleService.findById(GroupRule.class, id+1);
 	    				 if (GroupRule.getUpper_limit() > checkGroupRulebehind.getLower_limit()) {
 		    				 callbackData = BjuiJson.json("403", "修改值超出下一个范围的下限", "", 
 			             "", "", "", "", "");
-		    			 }
-	    			 }
-	    		 }else {
+	    				 }	    			
+	    		 }
+	    		 if (callbackData.equals("")) {
 		    		 GroupRuleUnsave = this.groupRuleService.findById(GroupRule.class, id);
 		    		 GroupRule.setCreateDate(GroupRuleUnsave.getCreateDate());
 		    		 GroupRule.setVersion(GroupRuleUnsave.getVersion());
@@ -136,9 +137,8 @@ public class GroupRuleAction extends BaseAction{
 			         else
 			           callbackData = BjuiJson.json("300", "修改失败", "", 
 			             "", "", "", "", "");
-		    	 }
+		    	 }	
 	    	 }
-	         
 	     }
 	     catch (JSONException e) {
 	       e.printStackTrace();
