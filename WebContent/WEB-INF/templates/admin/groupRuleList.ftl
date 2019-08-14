@@ -17,6 +17,7 @@
 		</thead>
 		<tbody>
         <#list groupRuleList as groupRule>
+        <#if groupRule.level == 0 || groupRule.level == 6>
             <tr>
                 <td>${groupRule.id}</td>
                 <td>${groupRule.lower_limit}</td>
@@ -28,6 +29,7 @@
                    
                 </td>
             </tr>
+            </#if>
 		</#list>
 		</tbody>
     </table>
