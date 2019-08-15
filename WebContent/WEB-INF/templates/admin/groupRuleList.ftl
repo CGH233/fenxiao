@@ -23,7 +23,7 @@
                 <td>${groupRule.lower_limit}</td>
                 <td>${groupRule.upper_limit!"无上限"}</td>
                 <td>${groupRule.commission}</td>
-                <td><#if groupRule.level == 6 >联创股东<#else>无</#if></td>
+                <td><#if groupRule.level == 6 >联创股东<#else>区代以上</#if></td>
                 <td>
                     <a href="groupRuleEdit.action?id=${groupRule.id}" class="btn btn-green" data-toggle="dialog" data-width="800" data-height="400" data-id="userEdit" data-mask="true">编辑</a>
                    

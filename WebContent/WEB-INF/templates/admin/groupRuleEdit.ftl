@@ -29,7 +29,7 @@
                         <td>
 							<label for="status" class="control-label x90">身份需求：</label>
                             <select name="groupRule.level" id="level" style="text-align:left;text-align-last:left;width:90px;margin:0 auto;" >
-                                 <option value='0' <#if groupRule?if_exists.level < 6>selected</#if>>无</option>
+                                 <option value='0' <#if groupRule?if_exists.level < 6>selected</#if>>区级以上</option>
                                  <option value='6' <#if groupRule?if_exists.level == 6>selected</#if>>联创股东</option>
                             </select>
                         </td>
