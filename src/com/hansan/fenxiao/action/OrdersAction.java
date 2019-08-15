@@ -958,8 +958,9 @@ public class OrdersAction extends BaseAction
               }
               for (User cuser:cList) {
             	  if (cuser.getId() == findUser.getId()) continue;
+            	  int p = Integer.parseInt(cuser.getAddress().split("\\|")[0]);
             	  int c = Integer.parseInt(cuser.getAddress().split("\\|")[1]);
-            	  if (c == city) {
+            	  if (c == city && p == province) {
             		  BounsRule bounsRule = this.bounsRuleService.bounsRuleByLevel(cuser.getLevel());
             		  String rewardString = bounsRule.getRegionalReward();
             		  if(rewardString.contains("%")) {
@@ -992,7 +993,9 @@ public class OrdersAction extends BaseAction
               for (User auser:aList) {
             	  if (auser.getId() == findUser.getId()) continue;
             	  int a = Integer.parseInt(auser.getAddress().split("\\|")[2]);
-            	  if (a == area) {
+            	  int p = Integer.parseInt(auser.getAddress().split("\\|")[0]);
+            	  int c = Integer.parseInt(auser.getAddress().split("\\|")[1]);
+            	  if (a == area && c == city && p == province) {
             		  BounsRule bounsRule = this.bounsRuleService.bounsRuleByLevel(auser.getLevel());
             		  String rewardString = bounsRule.getRegionalReward();
             		  if(rewardString.contains("%")) {
@@ -1152,8 +1155,13 @@ public class OrdersAction extends BaseAction
           
           json.put("status", "1");
           json.put("message", "付款成功");
-          if (reward == 1 && existCommission > 0) {
+          if (reward == 1 ) {
+        	  if (existCommission > 0) {
         		  json.put("message", "付款成功，使用佣金抵扣 ￥"+useReward+"元");
+        	  } else {
+        		  json.put("message", "付款成功，佣金不足，使用了余额支付");
+        	  }
+        		  
           }
           json.put("no", findOrders.getNo());
           

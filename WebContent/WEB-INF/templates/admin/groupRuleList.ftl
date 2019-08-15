@@ -20,8 +20,8 @@
         <#if groupRule.level == 0 || groupRule.level == 6>
             <tr>
                 <td>${groupRule.id}</td>
-                <td>${groupRule.lower_limit}</td>
-                <td>${groupRule.upper_limit!"无上限"}</td>
+                <td>#{groupRule.lower_limit;M4}</td>
+                <td><#if groupRule.upper_limit ?exists>#{groupRule.upper_limit;M4}<#else>无上限</#if></td>
                 <td>${groupRule.commission}</td>
                 <td><#if groupRule.level == 6 >联创股东<#else>区代以上</#if></td>
                 <td>
